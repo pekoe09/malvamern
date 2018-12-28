@@ -1,0 +1,45 @@
+{
+  "name": "malvamern",
+  "version": "0.0.1",
+  "description": "Garden diary and planner",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server",
+    "watch": "cross-env NODE_ENV=development node_modules/.bin/nodemon server",
+    "lint": "node_modules/.bin/eslint .",
+    "test": "cross-env NODE_ENV=test node_modules/.bin/jest --runInBand"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekoe09/malvamern.git"
+  },
+  "author": "Juha Kangas",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/pekoe09/malvamern/issues"
+  },
+  "homepage": "https://github.com/pekoe09/malvamern#readme",
+  "devDependencies": {
+    "babel-eslint": "9.0.0",
+    "cross-env": "^5.2.0",
+    "eslint": "5.6.0",
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9",
+    "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.23.0",
+    "mongoose": "^5.4.1"
+  }
+}
