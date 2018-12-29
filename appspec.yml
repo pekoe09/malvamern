@@ -13,5 +13,5 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: /bin/malva-hook-afterinstall.sh
+    - location: /scripts/malva-hook-afterinstall.sh
       runas: ubuntu
