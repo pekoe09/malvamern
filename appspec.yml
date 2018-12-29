@@ -5,3 +5,13 @@ os: linux
 files:
   - source: ./
     destination: /home/ubuntu/malva
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+
+hooks:
+  AfterInstall:
+    - location: /bin/malva-hook-afterinstall.sh
+      runas: ubuntu
