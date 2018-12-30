@@ -6,6 +6,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 console.log('Connecting to database...')
+mongoose.set('useNewUrlParser', true)
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
 mongoose.connect(config.mongoConnStr, {useNewUrlParser: true})
 mongoose.Promise = global.Promise
 console.log('...connected!')
