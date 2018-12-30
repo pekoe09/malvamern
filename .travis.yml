@@ -10,8 +10,9 @@ deploy:
   secret_access_key: $AWS_SECRET_KEY
   local_dir: dpl_cd_upload
   skip_cleanup: true
-  on: &2
-  repo: pekoe09/malvamern
+  on:
+    branch: master
+    repo: pekoe09/malvamern
   bucket: malva-deploy
   region: eu-central-1
 - provider: codedeploy
@@ -23,7 +24,8 @@ deploy:
   application: CodeDeployMalva
   deployment_group: MalvaDeploymentGroup
   region: eu-central-1
-  on: *2
+  on:
+    branch: master
 script:
   - zip -r latest *
   - mkdir -p dpl_cd_upload

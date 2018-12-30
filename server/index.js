@@ -10,10 +10,14 @@ const mongo = require('./mongo')
 const { tokenExtractor } = require('./utils/tokenExtractor')
 const { userExtractor } = require('./utils/userExtractor')
 
+const userRouter = require('./controllers/userController')
+
 app.use(cors())
 app.use(bodyparser.json())
 app.use(tokenExtractor)
 app.use(userExtractor)
+
+app.use('/api/users', userRouter)
 
 app.use(express.static(path.resolve(__dirname, '../client/build')))
 
