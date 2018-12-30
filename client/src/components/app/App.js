@@ -1,13 +1,15 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import MalvaLayout from '../uiStructure/MalvaLayout'
+
 
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <MalvaLayout>
         <p>Nothing to see here, disperse!</p>
-      </div>
+      </MalvaLayout>
     )
   }
 }
