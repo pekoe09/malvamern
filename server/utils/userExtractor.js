@@ -5,7 +5,20 @@ const userExtractor = async (req, res, next) => {
   if (!req.token) {
     req.user = null
   } else {
-    const userId = getUserIdFromToken(req.token)
+    let userId
+    await jwt.verify(req.token, process.env.SECRET, (err, decoded) => {
+      if(err) {
+        let errWrap = new Error('Username is already in use')
+        errWrap.isUnauthorizedAttempt = true
+        next(errWrap)
+      } else {
+        console.log(decoded)
+        console.log(decoded.userId)
+        userId = decoded.userId
+      }
+    })
+
+    console.log(userId)
     if (!userId) {
       let err = new Error('Token is invalid')
       err.isUnauthorizedAttempt = true
@@ -14,16 +27,6 @@ const userExtractor = async (req, res, next) => {
     req.user = await User.findById(userId)
   }
   next()
-}
-
-const getUserIdFromToken = (token) => {
-  try {
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    return decodedToken.userId
-  } catch (exception) {
-    console.log('Token exception', exception)
-    return null
-  }
 }
 
 module.exports = { userExtractor }
