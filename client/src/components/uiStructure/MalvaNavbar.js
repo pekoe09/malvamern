@@ -41,38 +41,43 @@ const AnonymousVisitorActions = () => {
 
 const LoggedInVisitorNavs = () => {
   return (
-    <Nav>
-      <NavItem>
-        <NavLink to='/plants'>
+    <Nav bsClass='malva-navitem'>
+      <LinkContainer to='/plants'>
+        <NavItem>
           Kasvit
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to='/calendar'>
+        </NavItem>
+      </LinkContainer>
+      <LinkContainer to='/calendar'>
+        <NavItem>
           Kalenteri
-        </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to='/diary'>
+        </NavItem>
+      </LinkContainer>
+      <LinkContainer to='/diary'>
+        <NavItem>
           Päiväkirja
-        </NavLink>
+        </NavItem>
+      </LinkContainer>
+    </Nav>
+  )
+}
+
+const LoggedInVisitorActions = () => {
+  return (
+    <Nav pullRight bsClass='malva-navitem'>
+      <NavItem style={{ padding: 0, marginTop: 0 }}>
+        <Logout />
       </NavItem>
     </Nav>
   )
 }
 
-const LoggedInVisitorActions = ({ currentUser }) => {
+const LoggedInVisitorSelf = ({ currentUser }) => {
   return (
-    <Nav pullRight>
-      <NavItem>
-        <Logout />
-      </NavItem>
-      <Navbar.Text>
-        <NavLink to='/my-info'>
-          {currentUser.firstNames}
-        </NavLink>
+    <LinkContainer to='/my-info' pullRight>
+      <Navbar.Text className='malva-navbar-textlink'>
+        {currentUser.firstNames}
       </Navbar.Text>
-    </Nav>
+    </LinkContainer>
   )
 }
 
@@ -92,7 +97,9 @@ const MalvaNavbar = ({ currentUser }) => {
       {!currentUser && <AnonymousVisitorNavs />}
 
       {!currentUser && <AnonymousVisitorActions />}
-      {currentUser && <LoggedInVisitorActions currentUser={currentUser} />}
+
+      {currentUser && <LoggedInVisitorActions />}
+      {currentUser && <LoggedInVisitorSelf currentUser={currentUser} />}
     </StyledNavbar>
   )
 }

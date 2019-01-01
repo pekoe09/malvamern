@@ -1,12 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
+import { Navbar, Button } from 'react-bootstrap'
 import { logout } from '../../actions/userActions'
-
-const logoutButtonStyle = {
-  fontSize: '0.9rem'
-}
 
 const Logout = ({ logout, history }) => {
   const handleLogout = () => {
@@ -15,13 +11,14 @@ const Logout = ({ logout, history }) => {
   }
 
   return (
-    <Button
-      onClick={handleLogout}
-      style={logoutButtonStyle}
-      size='mini'
-    >
-      Logout
-    </Button>
+    <Navbar.Form>
+      <Button
+        onClick={handleLogout}
+        size='mini'
+      >
+        Logout
+      </Button>
+    </Navbar.Form>
   )
 }
 

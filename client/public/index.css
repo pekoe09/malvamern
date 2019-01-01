@@ -25,6 +25,7 @@ div#main {
 
 .malva-navbar-default .malva-navitem>li {
   list-style: none;
+  margin-right: 15px;
 }
 
 .malva-navbar-default .malva-navitem>li>a {
@@ -46,4 +47,11 @@ div#main {
 
 .malva-navbar-default .malva-navitem>.active>a:hover {
   background-color: lightgreen;
+}
+
+.malva-navbar-default .malva-navbar-textlink {
+  color: white;
+  font-size: 1.2em;
+  margin-top: 15px;
+  margin-right: 15px;
 }

@@ -14,8 +14,8 @@ class Login extends React.Component {
     }
   }
 
-  handleChange = (event, { value }) => {
-    this.setState({ [event.target.name]: value })
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   handleSubmit = async (event) => {
@@ -24,6 +24,7 @@ class Login extends React.Component {
       username: this.state.username,
       password: this.state.password
     }
+    console.log('Login (Login.js)', credentials)
     await this.props.login(credentials)
     if (this.props.error) {
       await this.props.addUIMessage('Wrong username or password', 'error', 10)
@@ -32,7 +33,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <Navbar.Form onSubmit={this.handleSubmit}>
+      <Navbar.Form>
         <FormGroup>
           <FormControl
             placeholder='Username'
@@ -51,7 +52,7 @@ class Login extends React.Component {
             style={{ marginRight: 5 }}
           />
         </FormGroup>
-        <Button size='mini'>Login</Button>
+        <Button type='submit' onClick={this.handleSubmit}>Login</Button>
       </Navbar.Form>
     )
   }

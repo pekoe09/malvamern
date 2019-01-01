@@ -37,19 +37,14 @@ class Registration extends React.Component {
     }
   }
 
-  handleChange = (event, { value }) => {
-    this.setState({ [event.target.name]: value })
-  }
-
-  handlePasswordChange = (event) => {
-    console.log(event.target.value)
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
   handleSubmit = async (event) => {
     event.preventDefault()
     if (this.state.password !== this.state.password2) {
-      this.props.addUIMessage('"Password and "Confirm password" fields do not match!', 'error', 10)
+      this.props.addUIMessage('"Salasana- ja salasanan vahvistus -kentät eivät täsmää', 'error', 10)
     } else {
       const user = {
         username: this.state.username,
@@ -59,16 +54,17 @@ class Registration extends React.Component {
         firstNames: this.state.firstNames,
         email: this.state.email
       }
+      console.log('Registering (Registration.js)', user)
       await this.props.register(user)
       if (!this.props.error) {
         this.props.addUIMessage(
-          `Hi ${user.firstNames}, welcome to use Droplets! Please login with your new username and password.`,
+          `Hei ${user.firstNames}, tervetuloa Luppio-palvelun käyttäjäksi!`,
           'success',
           10
         )
         this.props.history.push('/')
       } else {
-        this.props.addUIMessage('Registration failed!', 'error', 10)
+        this.props.addUIMessage('Rekisteröityminen epäonnistui!', 'error', 10)
       }
     }
   }
@@ -93,6 +89,14 @@ class Registration extends React.Component {
     }
   }
 
+  getValidationState = (errors, fieldName) => {
+    if (errors[fieldName] && this.state.touched[fieldName]) {
+      return 'error'
+    } else {
+      return null
+    }
+  }
+
   render() {
     const errors = this.validate()
     const isEnabled = !Object.keys(errors).some(x => errors[x])
@@ -104,7 +108,7 @@ class Registration extends React.Component {
 
         <Col sm={6}>
           <StyledForm onSubmit={this.handleSubmit}>
-            <FormGroup validationState={errors.username && this.state.touched.username}>
+            <FormGroup validationState={this.getValidationState(errors, 'username')}>
               <StyledControlLabel>Käyttäjätunnus</StyledControlLabel>
               <FormControl
                 type='text'
@@ -114,7 +118,7 @@ class Registration extends React.Component {
                 onBlur={this.handleBlur('username')}
               />
             </FormGroup>
-            <FormGroup validationState={errors.password && this.state.touched.password}>
+            <FormGroup validationState={this.getValidationState(errors, 'password')}>
               <StyledControlLabel>Salasana</StyledControlLabel>
               <FormControl
                 type='password'
@@ -124,7 +128,7 @@ class Registration extends React.Component {
                 onBlur={this.handleBlur('password')}
               />
             </FormGroup>
-            <FormGroup validationState={errors.password2 && this.state.touched.password2}>
+            <FormGroup validationState={this.getValidationState(errors, 'password2')}>
               <StyledControlLabel>Vahvista Salasana</StyledControlLabel>
               <FormControl
                 type='password'
@@ -134,7 +138,7 @@ class Registration extends React.Component {
                 onBlur={this.handleBlur('password2')}
               />
             </FormGroup>
-            <FormGroup validationState={errors.email && this.state.touched.email}>
+            <FormGroup validationState={this.getValidationState(errors, 'email')}>
               <StyledControlLabel>Sähköposti</StyledControlLabel>
               <FormControl
                 type='text'
@@ -144,7 +148,7 @@ class Registration extends React.Component {
                 onBlur={this.handleBlur('email')}
               />
             </FormGroup>
-            <FormGroup validationState={errors.lastName && this.state.touched.lastName}>
+            <FormGroup validationState={this.getValidationState(errors, 'lastName')}>
               <StyledControlLabel>Sukunimi</StyledControlLabel>
               <FormControl
                 type='text'
@@ -154,18 +158,19 @@ class Registration extends React.Component {
                 onBlur={this.handleBlur('lastName')}
               />
             </FormGroup>
-            <FormGroup validationState={errors.firstNames && this.state.touched.firstNames}>
+            <FormGroup validationState={this.getValidationState(errors, 'firstNames')}>
               <StyledControlLabel>Etunimi</StyledControlLabel>
               <FormControl
                 type='text'
                 name='firstNames'
                 value={this.state.firstNames}
-                onChange={this.handleBlur('firstNames')}
+                onChange={this.handleChange}
                 onBlur={this.handleBlur('firstNames')}
               />
             </FormGroup>
             <Button
               bsStyle='primary'
+              type='submit'
               disabled={!isEnabled}
               style={{ marginRight: 5 }}
             >
