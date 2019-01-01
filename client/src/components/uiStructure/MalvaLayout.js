@@ -5,7 +5,7 @@ import UIMessages from './UIMessages'
 const MalvaLayout = (props) => {
   return (
     <div
-      style={{ display: 'flex', height: 'fit-content', fontFamily: 'Open sans' }}
+      style={{ display: 'flex', height: 'fit-content', fontFamily: 'Open sans', paddingTop: 50 }}
     >
       <div id='main'>
         <MalvaNavbar />

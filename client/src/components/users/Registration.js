@@ -1,11 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
-import ViewHeader from '../common/viewHeader'
-import LinkButton from '../common/linkButton'
+import styled from 'styled-components'
+import { Col, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
+import ViewHeader from '../common/ViewHeader'
+import LinkButton from '../common/LinkButton'
 import { register } from '../../actions/userActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
+
+const StyledForm = styled(Form)`
+  font-family: 'sans serif'
+`
+
+const StyledControlLabel = styled(ControlLabel)`
+      font-weight: 500
+    `
 
 class Registration extends React.Component {
   constructor(props) {
@@ -90,99 +99,85 @@ class Registration extends React.Component {
 
     return (
       <div>
-        <ViewHeader text='Register to use Droplets!' />
+        <ViewHeader text='Aloita Luppion käyttö nyt!' />
         {this.props.registering && <h3>Handling registration...</h3>}
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup validationState={errors.username && this.state.touched.username}>
-            <ControlLabel>Username</ControlLabel>
-            <FormControl
-              type='text'
-              name='username'
-              value={this.state.username}
-              onChange={this.handleChange}
-              onBlur={this.UNSAFE_componentWillMount.handleBlur('username')}
-            />
-          </FormGroup>
 
-          <Form.Field required width={6}>
-            <label>Password</label>
-            <input
-              type='password'
-              name='password'
-              value={this.state.password}
-              error={errors.password && this.state.touched.password}
-              onChange={this.handlePasswordChange}
-              onBlur={this.handleBlur('password')}
-              style={
-                {
-                  borderColor: errors.password && this.state.touched.password ? '#e0b4b4' : '',
-                  color: errors.password && this.state.touched.password ? '#9f3a38' : '',
-                  backgroundColor: errors.password && this.state.touched.password ? '#FFF6F6' : ''
-                }
-              }
-            />
-          </Form.Field>
-          <Form.Field required width={6}>
-            <label>Confirm password</label>
-            <input
-              type='password'
-              name='password2'
-              value={this.state.password2}
-              error={errors.password2 && this.state.touched.password2}
-              onChange={this.handlePasswordChange}
-              onBlur={this.handleBlur('password2')}
-              style={
-                {
-                  borderColor: errors.password && this.state.touched.password ? '#e0b4b4' : '',
-                  color: errors.password && this.state.touched.password ? '#9f3a38' : '',
-                  backgroundColor: errors.password && this.state.touched.password ? '#FFF6F6' : ''
-                }
-              }
-            />
-          </Form.Field>
-          <Form.Field
-            required
-            control={Input}
-            width={6}
-            label='Email'
-            name='email'
-            value={this.state.email}
-            error={errors.email && this.state.touched.email}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur('email')}
-          />
-          <Form.Field
-            required
-            control={Input}
-            width={6}
-            label='Last name'
-            name='lastName'
-            value={this.state.lastName}
-            error={errors.lastName && this.state.touched.lastName}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur('lastName')}
-          />
-          <Form.Field
-            required
-            control={Input}
-            width={6}
-            label='First names'
-            name='firstNames'
-            value={this.state.firstNames}
-            error={errors.firstNames && this.state.touched.firstNames}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur('firstNames')}
-          />
-          <Form.Field>
+        <Col sm={6}>
+          <StyledForm onSubmit={this.handleSubmit}>
+            <FormGroup validationState={errors.username && this.state.touched.username}>
+              <StyledControlLabel>Käyttäjätunnus</StyledControlLabel>
+              <FormControl
+                type='text'
+                name='username'
+                value={this.state.username}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur('username')}
+              />
+            </FormGroup>
+            <FormGroup validationState={errors.password && this.state.touched.password}>
+              <StyledControlLabel>Salasana</StyledControlLabel>
+              <FormControl
+                type='password'
+                name='password'
+                value={this.state.password}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur('password')}
+              />
+            </FormGroup>
+            <FormGroup validationState={errors.password2 && this.state.touched.password2}>
+              <StyledControlLabel>Vahvista Salasana</StyledControlLabel>
+              <FormControl
+                type='password'
+                name='password2'
+                value={this.state.password2}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur('password2')}
+              />
+            </FormGroup>
+            <FormGroup validationState={errors.email && this.state.touched.email}>
+              <StyledControlLabel>Sähköposti</StyledControlLabel>
+              <FormControl
+                type='text'
+                name='email'
+                value={this.state.email}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur('email')}
+              />
+            </FormGroup>
+            <FormGroup validationState={errors.lastName && this.state.touched.lastName}>
+              <StyledControlLabel>Sukunimi</StyledControlLabel>
+              <FormControl
+                type='text'
+                name='lastName'
+                value={this.state.lastName}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur('lastName')}
+              />
+            </FormGroup>
+            <FormGroup validationState={errors.firstNames && this.state.touched.firstNames}>
+              <StyledControlLabel>Etunimi</StyledControlLabel>
+              <FormControl
+                type='text'
+                name='firstNames'
+                value={this.state.firstNames}
+                onChange={this.handleBlur('firstNames')}
+                onBlur={this.handleBlur('firstNames')}
+              />
+            </FormGroup>
             <Button
-              primary
+              bsStyle='primary'
               disabled={!isEnabled}
+              style={{ marginRight: 5 }}
             >
-              Register!
+              Rekisteröidy!
             </Button>
-            <LinkButton text='Cancel' to='/' type='default' />
-          </Form.Field>
-        </Form>
+            <LinkButton
+              text='Peruuta'
+              to='/'
+              type='default'
+            />
+          </StyledForm>
+        </Col>
       </div>
     )
   }

@@ -33,25 +33,25 @@ class Login extends React.Component {
   render() {
     return (
       <Navbar.Form onSubmit={this.handleSubmit}>
-        <FormGroup inline>
+        <FormGroup>
           <FormControl
-            inline
             placeholder='Username'
             name='username'
             size='mini'
             value={this.state.username}
             onChange={this.handleChange}
+            style={{ marginRight: 5 }}
           />
           <FormControl
-            inline
             placeholder='Password'
             name='password'
             size='mini'
             value={this.state.password}
             onChange={this.handleChange}
+            style={{ marginRight: 5 }}
           />
         </FormGroup>
-        <Button primary size='mini'>Login</Button>
+        <Button size='mini'>Login</Button>
       </Navbar.Form>
     )
   }

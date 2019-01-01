@@ -13,7 +13,7 @@ class App extends React.Component {
       <MalvaLayout>
         <Route exact path='/' render={() => <FrontPage />} />
         <Route exact path='/plants' render={() => <PlantsList />} />
-        <Route exact path='/registration' render={() => <Registration />} />
+        <Route exact path='/register' render={() => <Registration />} />
         <p>Nothing to see here, disperse!</p>
       </MalvaLayout>
     )

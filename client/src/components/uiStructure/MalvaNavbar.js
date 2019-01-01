@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, Nav, NavItem } from 'react-bootstrap'
 import Login from '../users/Login'
 import Logout from '../users/Logout'
@@ -13,25 +14,25 @@ const StyledNavbar = styled(Navbar)`
 
 const AnonymousVisitorNavs = () => {
   return (
-    <Nav>
-      <NavItem>
-        <NavLink to='/plants'>
+    <Nav bsClass='malva-navitem'>
+      <LinkContainer to='/plants'>
+        <NavItem>
           Kasvit
-        </NavLink>
-      </NavItem>
+        </NavItem>
+      </LinkContainer>
     </Nav>
   )
 }
 
 const AnonymousVisitorActions = () => {
   return (
-    <Nav pullRight>
-      <NavItem>
-        <NavLink to='/register' style={{ fontSize: '1.3em', color: 'white', textDecoration: 'none', fontFamily: 'sans-serif' }}>
-          Rekisteröidy!
-        </NavLink>
-      </NavItem>
-      <NavItem style={{ padding: 0 }}>
+    <Nav pullRight bsClass='malva-navitem'>
+      <LinkContainer to='/register'>
+        <NavItem>
+          Rekisteröidy tästä
+        </NavItem>
+      </LinkContainer>
+      <NavItem style={{ padding: 0, marginTop: 0 }}>
         <Login />
       </NavItem>
     </Nav>
@@ -78,7 +79,7 @@ const LoggedInVisitorActions = ({ currentUser }) => {
 const MalvaNavbar = ({ currentUser }) => {
 
   return (
-    <StyledNavbar fixedTop fluid>
+    <StyledNavbar fixedTop fluid className='malva-navbar-default'>
       <Navbar.Header>
         <Navbar.Brand>
           <NavLink to='/'>
