@@ -10,6 +10,10 @@ const mongo = require('./mongo')
 const { tokenExtractor } = require('./utils/tokenExtractor')
 const { userExtractor } = require('./utils/userExtractor')
 
+const countryRouter = require('./controllers/countryController')
+const growthZoneRouter = require('./controllers/growthZoneController')
+const lightTypeRouter = require('./controllers/lightTypeController')
+const soilTypeRouter = require('./controllers/soilTypeController')
 const userRouter = require('./controllers/userController')
 
 app.use(cors())
@@ -17,6 +21,10 @@ app.use(bodyparser.json())
 app.use(tokenExtractor)
 app.use(userExtractor)
 
+app.use('/api/countries', countryRouter)
+app.use('/api/growthzones', growthZoneRouter)
+app.use('/api/lighttypes', lightTypeRouter)
+app.use('/api/soiltypes', soilTypeRouter)
 app.use('/api/users', userRouter)
 
 app.use(express.static(path.resolve(__dirname, '../client/build')))
