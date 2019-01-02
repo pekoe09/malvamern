@@ -13,7 +13,7 @@ countryRouter.get('/', wrapAsync(async (req, res, next) => {
 
 countryRouter.post('/', wrapAsync(async (req, res, next) => {
   checkUser(req)
-  validateMandatoryFields(req, ['name', 'abbreviation'])
+  validateMandatoryFields(req, ['name', 'abbreviation'], 'country', 'create')
 
   let matchByName = await Country.findOne({ name: req.body.name })
   let matchByAbbreviation = await Country.findOne({ abbreviation: req.body.abbreviation })
@@ -24,7 +24,7 @@ countryRouter.post('/', wrapAsync(async (req, res, next) => {
   }
   if (matchByAbbreviation) {
     let err = new Error('Another country with the same abbreviation exists already')
-    err.isBadRequest
+    err.isBadRequest = true
     throw err
   }
 
@@ -38,7 +38,7 @@ countryRouter.post('/', wrapAsync(async (req, res, next) => {
 
 countryRouter.put('/:id', wrapAsync(async (req, res, next) => {
   checkUser(req)
-  validateMandatoryFields(req, ['name', 'abbreviation'])
+  validateMandatoryFields(req, ['name', 'abbreviation'], 'country', 'update')
 
   let country = await Country.findById(req.params.id)
   if (!country) {
@@ -48,20 +48,20 @@ countryRouter.put('/:id', wrapAsync(async (req, res, next) => {
   }
   let matchByName = await Country.findOne({ name: req.body.name })
   let matchByAbbreviation = await Country.findOne({ abbreviation: req.body.abbreviation })
-  if (matchByName && matchByName._id !== country._id) {
+  if (matchByName && !matchByName._id.equals(country._id)) {
     let err = new Error('Another country with the same name exists already')
     err.isBadRequest = true
     throw err
   }
-  if (matchByAbbreviation && matchByAbbreviation._id !== country._id) {
+  if (matchByAbbreviation && !matchByAbbreviation._id.equals(country._id)) {
     let err = new Error('Another country with the same abbreviation exists already')
-    err.isBadRequest
+    err.isBadRequest = true
     throw err
   }
 
   country.name = req.body.name
   country.abbreviation = req.body.abbreviation
-  country = await Country.findByIdAndUpdate(country._id, country)
+  country = await Country.findByIdAndUpdate(country._id, country, { new: true })
   res.status(201).json(country)
 }))
 

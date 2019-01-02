@@ -12,13 +12,10 @@ const userExtractor = async (req, res, next) => {
         errWrap.isUnauthorizedAttempt = true
         next(errWrap)
       } else {
-        console.log(decoded)
-        console.log(decoded.userId)
         userId = decoded.userId
       }
     })
 
-    console.log(userId)
     if (!userId) {
       let err = new Error('Token is invalid')
       err.isUnauthorizedAttempt = true
