@@ -3,7 +3,7 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const { expect } = require('chai')
 const { initialCountries, resetCountries, countriesInDb, nonExistingId } = require('./countries.testHelper')
-const { initialUsers, getToken, getBogusToken, getOldUsersToken } = require('./users.testHelper')
+const { initialUsers, resetUsers, getToken, getBogusToken, getOldUsersToken } = require('./users.testHelper')
 
 describe('GET /api/countries', () => {
 
@@ -25,6 +25,7 @@ describe('POST /api/countries', () => {
   let token = null
 
   beforeEach('Get user token', async () => {
+    await resetUsers()
     token = await getToken(initialUsers[0].username)
     await resetCountries()
   })
@@ -210,6 +211,7 @@ describe('PUT /api/countries/:id', async () => {
   let token = null
 
   beforeEach('Get user token', async () => {
+    await resetUsers()
     token = await getToken(initialUsers[0].username)
     await resetCountries()
   })
@@ -428,6 +430,7 @@ describe('DELETE /api/countries:id', async () => {
   let token = null
 
   beforeEach('Get user token', async () => {
+    await resetUsers()
     token = await getToken(initialUsers[0].username)
     await resetCountries()
   })
