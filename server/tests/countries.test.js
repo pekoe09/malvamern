@@ -434,6 +434,10 @@ describe('DELETE /api/countries:id', async () => {
     token = await getToken(initialUsers[0].username)
     await resetCountries()
   })
+    
+  afterEach('Reset countries', async () => {
+    await resetCountries()
+  })
 
   it('deletes the right country', async () => {
     const countriesBefore = await countriesInDb()
@@ -508,6 +512,7 @@ describe('DELETE /api/countries:id', async () => {
     const countriesAfter = await countriesInDb()
     expect(countriesBefore).to.deep.equal(countriesAfter)
   })
+
 })
 
 after('Close server', async () => {
