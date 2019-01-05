@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, NavItem } from 'react-bootstrap'
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
 import Login from '../users/Login'
 import Logout from '../users/Logout'
 
@@ -61,6 +61,18 @@ const LoggedInVisitorNavs = () => {
   )
 }
 
+const LoggedInAdminNavs = () => {
+  return (
+    <Nav bsClass='malva-navitem'>
+      <NavDropdown title='Ohjaustiedot'>
+        <LinkContainer to='/countries'>
+          <MenuItem>Maat</MenuItem>
+        </LinkContainer>
+      </NavDropdown>
+    </Nav>
+  )
+}
+
 const LoggedInVisitorActions = () => {
   return (
     <Nav pullRight bsClass='malva-navitem'>
@@ -94,6 +106,7 @@ const MalvaNavbar = ({ currentUser }) => {
       </Navbar.Header>
 
       {currentUser && <LoggedInVisitorNavs />}
+      {currentUser && <LoggedInAdminNavs />}
       {!currentUser && <AnonymousVisitorNavs />}
 
       {!currentUser && <AnonymousVisitorActions />}
