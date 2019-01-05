@@ -23,7 +23,7 @@ const countriesInDb = async () => {
     .find({})
 }
 
-const nonExistingId = async () => {
+const nonExistingCountryId = async () => {
   let country = new Country({
     name: 'countryn',
     abbreviation: 'cn'
@@ -44,6 +44,6 @@ const resetCountries = async () => {
 module.exports = {
   initialCountries,
   countriesInDb,
-  nonExistingId,
+  nonExistingCountryId,
   resetCountries
 } 

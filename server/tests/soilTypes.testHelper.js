@@ -7,22 +7,22 @@ const initialSoilTypes = [
   {
     name: 'soiltype1',
     country: {
-      name: 'countryst1',
-      abbreviation: 'cst1'
+      name: 'country1',
+      abbreviation: 'c1'
     }
   },
   {
     name: 'soiltype2',
     country: {
-      name: 'countryst2',
-      abbreviation: 'cst2'
+      name: 'country1',
+      abbreviation: 'c1'
     }
   },
   {
     name: 'soiltype3',
     country: {
-      name: 'countryst1',
-      abbreviation: 'cst1'
+      name: 'country1',
+      abbreviation: 'c1'
     }
   }
 ]
@@ -32,7 +32,7 @@ const soilTypesInDb = async () => {
     .find({})
 }
 
-const nonExistingId = async () => {
+const nonExistingSoilTypeId = async () => {
   let soilType = new SoilType({
     name: 'soiltypen',
     country: {
@@ -56,6 +56,6 @@ const resetSoilTypes = async () => {
 module.exports = {
   initialSoilTypes,
   soilTypesInDb,
-  nonExistingId,
+  nonExistingSoilTypeId,
   resetSoilTypes
 }

@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const { expect } = require('chai')
-const { initialCountries, resetCountries, countriesInDb, nonExistingId } = require('./countries.testHelper')
+const { initialCountries, resetCountries, countriesInDb, nonExistingCountryId } = require('./countries.testHelper')
 const { initialUsers, resetUsers, getToken, getBogusToken, getOldUsersToken } = require('./users.testHelper')
 
 describe('GET /api/countries', () => {
@@ -408,7 +408,7 @@ describe('PUT /api/countries/:id', async () => {
   it('does not update a non-existing country', async () => {
     const countriesBefore = await countriesInDb()
     const targetCountry = countriesBefore.find(c => c.name === initialCountries[1].name)
-    const nonId = await nonExistingId()
+    const nonId = await nonExistingCountryId()
     const editedCountry = {
       _id: targetCountry._id,
       name: 'newname',
@@ -446,7 +446,6 @@ describe('DELETE /api/countries:id', async () => {
     const response = await api
       .delete('/api/countries/' + targetCountry._id)
       .set('Authorization', 'Bearer ' + token)
-      .send(targetCountry)
       .expect(204)
 
     const countriesAfter = await countriesInDb()
@@ -461,7 +460,6 @@ describe('DELETE /api/countries:id', async () => {
 
     const response = await api
       .delete('/api/countries/' + targetCountry._id)
-      .send(targetCountry)
       .expect(401)
 
     const countriesAfter = await countriesInDb()
@@ -476,7 +474,6 @@ describe('DELETE /api/countries:id', async () => {
     const response = await api
       .delete('/api/countries/' + targetCountry._id)
       .set('Authorization', 'Bearer ' + bogusToken)
-      .send(targetCountry)
       .expect(401)
 
     const countriesAfter = await countriesInDb()
@@ -491,7 +488,6 @@ describe('DELETE /api/countries:id', async () => {
     const response = await api
       .delete('/api/countries/' + targetCountry._id)
       .set('Authorization', 'Bearer ' + oldToken)
-      .send(targetCountry)
       .expect(401)
 
     const countriesAfter = await countriesInDb()
@@ -501,12 +497,11 @@ describe('DELETE /api/countries:id', async () => {
   it('returns error with non-existing id', async () => {
     const countriesBefore = await countriesInDb()
     const targetCountry = countriesBefore.find(c => c.name === initialCountries[1].name)
-    const nonId = await nonExistingId()
+    const nonId = await nonExistingCountryId()
 
     const response = await api
       .delete('/api/countries/' + nonId)
       .set('Authorization', 'Bearer ' + token)
-      .send(targetCountry)
       .expect(400)
 
     const countriesAfter = await countriesInDb()

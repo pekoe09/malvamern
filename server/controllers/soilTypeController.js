@@ -19,7 +19,7 @@ soilTypeRouter.get('/', wrapAsync(async (req, res, next) => {
 
 soilTypeRouter.post('/', wrapAsync(async (req, res, next) => {
   checkUser(req)
-  validateMandatoryFields(req, ['name', 'countryId'])
+  validateMandatoryFields(req, ['name', 'countryId'], 'soil type', 'create')
 
   let country = await Country.findById(req.body.countryId)
   if (!country) {
@@ -47,7 +47,8 @@ soilTypeRouter.post('/', wrapAsync(async (req, res, next) => {
 
 soilTypeRouter.put('/:id', wrapAsync(async (req, res, next) => {
   checkUser(req)
-  validateMandatoryFields(req, ['name', 'countryId'])
+  console.log('Received', req.body)
+  validateMandatoryFields(req, ['name', 'countryId'], 'soil type', 'update')
 
   let soilType = await SoilType.findById(req.params.id)
   if (!soilType) {
@@ -56,24 +57,29 @@ soilTypeRouter.put('/:id', wrapAsync(async (req, res, next) => {
     throw err
   }
   let country = await Country.findById(req.body.countryId)
+  console.log('Country', country)
   if (!country) {
     let err = new Error('Country does not exist')
     err.isBadRequest = true
     throw err
   }
   let match = await SoilType.findOne({ name: req.body.name, 'country.name': country.name })
-  if (match && match_id !== soilType._id) {
+  console.log('Match', match)
+  if (match && match._id !== soilType._id) {
     let err = new Error('Another soil type for the same country with the same name exists already')
     err.isBadRequest = true
     throw err
   }
 
+  console.log('Soil type before', soilType)
   soilType.name = req.body.name
   soilType.country = {
     name: country.name,
     abbreviation: country.abbreviation
   }
-  soilType = await SoilType.findByIdAndUpdate(soilType._id, soilType)
+  console.log('Soil type after', soilType)
+  soilType = await SoilType.findByIdAndUpdate(soilType._id, soilType, { new: true })
+  console.log('Returning', soilType)
   res.status(201).json(soilType)
 }))
 

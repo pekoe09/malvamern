@@ -38,7 +38,7 @@ countryRouter.post('/', wrapAsync(async (req, res, next) => {
 
 countryRouter.put('/:id', wrapAsync(async (req, res, next) => {
   checkUser(req)
-  validateMandatoryFields(req, ['name', 'abbreviation'], 'country', 'update')
+  validateMandatoryFields(req, ['name', 'abbreviation'], 'country', 'update', 'country', 'update')
 
   let country = await Country.findById(req.params.id)
   if (!country) {
