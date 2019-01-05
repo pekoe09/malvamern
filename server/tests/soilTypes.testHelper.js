@@ -7,22 +7,22 @@ const initialSoilTypes = [
   {
     name: 'soiltype1',
     country: {
-      name: 'country1',
-      abbreviation: 'c1'
+      name: 'countryst1',
+      abbreviation: 'cst1'
     }
   },
   {
     name: 'soiltype2',
     country: {
-      name: 'country2',
-      abbreviation: 'c2'
+      name: 'countryst2',
+      abbreviation: 'cst2'
     }
   },
   {
     name: 'soiltype3',
     country: {
-      name: 'country1',
-      abbreviation: 'c1'
+      name: 'countryst1',
+      abbreviation: 'cst1'
     }
   }
 ]

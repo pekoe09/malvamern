@@ -27,8 +27,11 @@ describe('POST /api/soiltypes', async () => {
 
   beforeEach('Get user token', async () => {
     await resetUsers()
-    await resetCountries()
     token = await getToken(initialUsers[0].username)
+    await resetSoilTypes()
+  })
+
+  afterEach('Reset soil types', async () => {
     await resetSoilTypes()
   })
 

@@ -81,7 +81,6 @@ countryRouter.delete('/:id', wrapAsync(async (req, res, next) => {
     err.isBadRequest = true
     throw err
   }
-
   await Country.findByIdAndRemove(country._id)
   res.status(204).end()
 }))
