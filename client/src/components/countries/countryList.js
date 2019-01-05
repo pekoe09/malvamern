@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap'
 import { MalvaReactTable } from '../common/MalvaStyledComponents'
 import ViewHeader from '../common/ViewHeader'
 import CountryAdd from './countryAdd'
+import ConfirmDelete from '../common/ConfirmDelete'
 import { getAllCountries, addCountry, updateCountry, deleteCountry } from '../../actions/countryActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
@@ -38,7 +39,6 @@ class CountryList extends React.Component {
   }
 
   handleSave = async (country) => {
-    console.log('Saving country', country)
     await this.props.addCountry(country)
     if (!this.props.error) {
       this.setState({
@@ -67,7 +67,27 @@ class CountryList extends React.Component {
   handleDelete = (row, e) => {
     e.stopPropagation()
     this.setState({
-      rowToDelete: row
+      rowToDelete: row,
+      deletiontargetId: row._id,
+      deletionTargetName: row.name,
+      openContryDeleteConfirm: true
+    })
+  }
+
+  handleDeleteConfirmation = async (isConfirmed) => {
+    if (isConfirmed) {
+      await this.props.deleteCountry(this.state.deletiontargetId)
+      if(!this.props.error) {
+        this.props.addUIMessage(`Maa ${this.state.deletionTargetName} on poistettu!`, 'success', 10)
+      } else {
+        this.props.addUIMessage(`Maan ${this.state.deletionTargetName} poisto ei onnistunut!`, 'danger', 10)
+      }
+    }
+    this.setState({
+      openContryDeleteConfirm: false,
+      rowToDelete: '',
+      deletionTargetName: '',
+      deletiontargetId: ''
     })
   }
 
@@ -107,7 +127,6 @@ class CountryList extends React.Component {
 
 
   render() {
-    // console.log('Countries', this.props.countries)
     return (
       <div>
         <ViewHeader text='Maat' />
@@ -138,14 +157,20 @@ class CountryList extends React.Component {
           handleSave={this.handleSave}
           modalError={this.state.modalError}
         />
+
+        <ConfirmDelete
+          modalIsOpen={this.state.openContryDeleteConfirm}
+          closeModal={this.handleDeleteConfirmation}
+          headerText={'Vahvista poisto'}
+          bodyText={`Oletko varma että haluat poistaa maan ${this.state.deletionTargetName}`}
+          isDangerous={true}
+        />
       </div>
     )
   }
-
 }
 
 const mapStateToProps = store => {
-  // console.log('Store countries', store.countries.items)
   return {
     countries: store.countries.items,
     loading: store.countries.loading,

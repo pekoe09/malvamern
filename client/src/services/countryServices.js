@@ -24,8 +24,8 @@ const updateCountry = async (country) => {
 
 const removeCountry = async (id) => {
   console.log('Removing (countryservices.js)', id)
-  const response = await axios.delete(`${baseUrl}/${id}`)
-  console.log('Received (countryServices.js):', response.data, getConfig())
+  const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
+  console.log('Received (countryServices.js):', response.data)
   return response.data
 }
 

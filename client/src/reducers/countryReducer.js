@@ -91,7 +91,7 @@ const countryReducer = (store = initialState, action) => {
     case COUNTRY_DELETE_SUCCESS:
       return {
         ...store,
-        items: store.items.filter(c => c.id !== action.payload.country.id),
+        items: store.items.filter(c => c._id !== action.payload.id),
         deleting: false,
         error: null
       }

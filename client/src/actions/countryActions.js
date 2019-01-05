@@ -59,9 +59,9 @@ const deleteCountryBegin = () => ({
   type: COUNTRY_DELETE_BEGIN
 })
 
-const deleteCountrySuccess = country => ({
+const deleteCountrySuccess = id => ({
   type: COUNTRY_DELETE_SUCCESS,
-  payload: { country }
+  payload: { id }
 })
 
 const deleteCountryFailure = error => ({
@@ -112,8 +112,8 @@ export const deleteCountry = (id) => {
   return async (dispatch) => {
     dispatch(deleteCountryBegin())
     try {
-      const country = await countryService.removeCountry(id)
-      dispatch(deleteCountrySuccess(country))
+      await countryService.removeCountry(id)
+      dispatch(deleteCountrySuccess(id))
     } catch (error) {
       console.log(error)
       dispatch(deleteCountryFailure(error))
