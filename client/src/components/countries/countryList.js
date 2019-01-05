@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { Button, Modal, Col, FormControl, FormGroup } from 'react-bootstrap'
-import { MalvaReactTable, MalvaForm, MalvaControlLabel } from '../common/MalvaStyledComponents'
+import { Button } from 'react-bootstrap'
+import { MalvaReactTable } from '../common/MalvaStyledComponents'
 import ViewHeader from '../common/ViewHeader'
+import CountryAdd from './countryAdd'
 import { getAllCountries, addCountry, updateCountry, deleteCountry } from '../../actions/countryActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
@@ -14,15 +15,10 @@ class CountryList extends React.Component {
       openCountryCreationModal: false,
       openCountryUpdateModal: false,
       openContryDeleteConfirm: false,
-      name: '',
-      abbreviation: '',
+      modalError: '',
       rowToDelete: '',
       deletiontargetId: '',
       deletionTargetName: '',
-      touched: {
-        name: false,
-        abbreviation: false
-      }
     }
   }
 
@@ -30,73 +26,33 @@ class CountryList extends React.Component {
     await this.props.getAllCountries()
   }
 
-  handleOpenCountryCreation = () => {
+  toggleCountryCreationOpen = () => {
     this.setState({
-      openCountryCreationModal: true
-    })
-  }
-
-  handleCloseCountryCreation = () => {
-    this.setState({
-      openCountryCreationModal: false,
-      name: '',
-      abbreviation: ''
+      modalError: '',
+      openCountryCreationModal: !this.state.openCountryCreationModal
     })
   }
 
   handleCancel = () => {
-
+    this.props.history.push('/')
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
-
-  handleBlur = (field) => () => {
-    this.setState({
-      touched: {
-        ...this.state.touched,
-        [field]: true
-      }
-    })
-  }
-
-  handleSubmit = async (event) => {
-    event.preventDefault()
-    console.log('Submitting')
-    const country = {
-      name: this.state.name,
-      abbreviation: this.state.abbreviation
-    }
-    console.log('Adding', country)
+  handleSave = async (country) => {
+    console.log('Saving country', country)
     await this.props.addCountry(country)
     if (!this.props.error) {
+      this.setState({
+        openCountryCreationModal: false
+      })
       this.props.addUIMessage(
         `Maa ${country.name} (${country.abbreviation}) luotu!`,
         'success',
         10
       )
     } else {
-      this.props.addUIMessage(
-        `Maan ${country.name} luonti epäonnistui!`,
-        'error',
-        10
-      )
-    }
-  }
-
-  validate = () => {
-    return {
-      name: !this.state.name,
-      abbreviation: !this.state.abbreviation
-    }
-  }
-
-  getValidationState = (errors, fieldName) => {
-    if (errors[fieldName] && this.state.touched[fieldName]) {
-      return 'error'
-    } else {
-      return null
+      this.setState({
+        modalError: `Maan ${country.name} luonti epäonnistui!`
+      })
     }
   }
 
@@ -151,16 +107,13 @@ class CountryList extends React.Component {
 
 
   render() {
-    const errors = this.validate()
-    const isEnabled = !Object.keys(errors).some(x => errors[x])
-
-    console.log('Countries', this.props.countries)
+    // console.log('Countries', this.props.countries)
     return (
       <div>
         <ViewHeader text='Maat' />
         <Button
           bsStyle='primary'
-          onClick={this.handleOpenCountryCreation}
+          onClick={this.toggleCountryCreationOpen}
         >
           Lisää maa
         </Button>
@@ -179,57 +132,12 @@ class CountryList extends React.Component {
           minRows={1}
         />
 
-        <Modal
-          show={this.state.openCountryCreationModal}
-          onHide={this.handleCloseCountryCreation}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Lisää maa</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <MalvaForm>
-              <FormGroup validationState={this.getValidationState(errors, 'name')}>
-                <MalvaControlLabel>Nimi</MalvaControlLabel>
-                <FormControl
-                  type='text'
-                  name='name'
-                  value={this.state.name}
-                  onChange={this.handleChange}
-                  onBlur={this.handleBlur('name')}
-                />
-              </FormGroup>
-              <FormGroup validationState={this.getValidationState(errors, 'abbreviation')}>
-                <MalvaControlLabel>Lyhenne</MalvaControlLabel>
-                <FormControl
-                  type='text'
-                  name='abbreviation'
-                  value={this.state.abbreviation}
-                  onChange={this.handleChange}
-                  onBlur={this.handleBlur('abbreviation')}
-                />
-              </FormGroup>
-            </MalvaForm>
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              bsStyle='primary'
-              type='submit'
-              onClick={this.handleSubmit}
-              disabled={!isEnabled}
-              style={{ marginRight: 5 }}
-            >
-              Tallenna
-            </Button>
-            <Button
-              bsStyle='default'
-              onClick={this.handleCloseCountryCreation}
-            >
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
+        <CountryAdd
+          modalIsOpen={this.state.openCountryCreationModal}
+          closeModal={this.toggleCountryCreationOpen}
+          handleSave={this.handleSave}
+          modalError={this.state.modalError}
+        />
       </div>
     )
   }
@@ -237,7 +145,7 @@ class CountryList extends React.Component {
 }
 
 const mapStateToProps = store => {
-  console.log('Store countries', store.countries.items)
+  // console.log('Store countries', store.countries.items)
   return {
     countries: store.countries.items,
     loading: store.countries.loading,
