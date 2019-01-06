@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap'
 import { MalvaReactTable } from '../common/MalvaStyledComponents'
 import ViewHeader from '../common/ViewHeader'
 import CountryAdd from './countryAdd'
+import CountryEdit from './countryEdit'
 import ConfirmDelete from '../common/ConfirmDelete'
 import { getAllCountries, addCountry, updateCountry, deleteCountry } from '../../actions/countryActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
@@ -18,6 +19,11 @@ class CountryList extends React.Component {
       openContryDeleteConfirm: false,
       modalError: '',
       rowToDelete: '',
+      rowToEdit: {
+        _id: '',
+        name: '',
+        abbreviation: ''
+      },
       deletiontargetId: '',
       deletionTargetName: '',
     }
@@ -31,6 +37,18 @@ class CountryList extends React.Component {
     this.setState({
       modalError: '',
       openCountryCreationModal: !this.state.openCountryCreationModal
+    })
+  }
+
+  closeCountryEditModal = () => {
+    this.setState({
+      modalError: '',
+      openCountryUpdateModal: false,
+      rowToEdit: {
+        _id: '',
+        name: '',
+        abbreviation: ''
+      }
     })
   }
 
@@ -56,10 +74,37 @@ class CountryList extends React.Component {
     }
   }
 
+  handleUpdate = async (country) => {
+    await this.props.updateCountry(country)
+    if (!this.props.error) {
+      this.setState({
+        openCountryUpdateModal: false,
+        rowToEdit: {
+          _id: '',
+          name: '',
+          abbreviation: ''
+        }
+      })
+      this.props.addUIMessage(
+        `Maa ${country.name} (${country.abbreviation}) päivitetty!`,
+        'success',
+        10
+      )
+    } else {
+      this.setState({
+        modalError: `Maan ${country.name} päivittäminen epäonnistui!`
+      })
+    }
+  }
+
   handleRowClick = (state, rowInfo) => {
     return {
       onClick: (e) => {
         console.log('Row clicked', rowInfo)
+        this.setState({
+          openCountryUpdateModal: true,
+          rowToEdit: rowInfo.original
+        })
       }
     }
   }
@@ -77,7 +122,7 @@ class CountryList extends React.Component {
   handleDeleteConfirmation = async (isConfirmed) => {
     if (isConfirmed) {
       await this.props.deleteCountry(this.state.deletiontargetId)
-      if(!this.props.error) {
+      if (!this.props.error) {
         this.props.addUIMessage(`Maa ${this.state.deletionTargetName} on poistettu!`, 'success', 10)
       } else {
         this.props.addUIMessage(`Maan ${this.state.deletionTargetName} poisto ei onnistunut!`, 'danger', 10)
@@ -156,6 +201,14 @@ class CountryList extends React.Component {
           closeModal={this.toggleCountryCreationOpen}
           handleSave={this.handleSave}
           modalError={this.state.modalError}
+        />
+
+        <CountryEdit
+          modalIsOpen={this.state.openCountryUpdateModal}
+          closeModal={this.closeCountryEditModal}
+          handleSave={this.handleUpdate}
+          modalError={this.state.modalError}
+          country={this.state.rowToEdit}
         />
 
         <ConfirmDelete

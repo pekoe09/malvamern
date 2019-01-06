@@ -72,7 +72,7 @@ const countryReducer = (store = initialState, action) => {
       const updated = action.payload.country
       return {
         ...store,
-        items: store.items.map(c => c.id === updated.id ? updated : c),
+        items: store.items.map(c => c._id === updated._id ? updated : c),
         updating: false,
         error: null
       }

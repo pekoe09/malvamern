@@ -64,7 +64,7 @@ const LoggedInVisitorNavs = () => {
 const LoggedInAdminNavs = () => {
   return (
     <Nav bsClass='malva-navitem'>
-      <NavDropdown title='Ohjaustiedot'>
+      <NavDropdown title='Ohjaustiedot' id='static-data'>
         <LinkContainer to='/countries'>
           <MenuItem>Maat</MenuItem>
         </LinkContainer>
