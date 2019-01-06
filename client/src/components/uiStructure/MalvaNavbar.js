@@ -68,6 +68,9 @@ const LoggedInAdminNavs = () => {
         <LinkContainer to='/countries'>
           <MenuItem>Maat</MenuItem>
         </LinkContainer>
+        <LinkContainer to='/soiltypes'>
+          <MenuItem>Maaperät</MenuItem>
+        </LinkContainer>
       </NavDropdown>
     </Nav>
   )

@@ -4,25 +4,28 @@ import { withRouter } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import { MalvaReactTable } from '../common/MalvaStyledComponents'
 import ViewHeader from '../common/ViewHeader'
-import CountryAdd from './countryAdd'
-import CountryEdit from './countryEdit'
+import SoilTypeAdd from './soilTypeAdd'
 import ConfirmDelete from '../common/ConfirmDelete'
-import { getAllCountries, addCountry, updateCountry, deleteCountry } from '../../actions/countryActions'
+import { getAllSoilTypes, addSoilType, updateSoilType, deleteSoilType } from '../../actions/soilTypeActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
-class CountryList extends React.Component {
+class SoilTypeList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      openCountryCreationModal: false,
-      openCountryUpdateModal: false,
-      openContryDeleteConfirm: false,
+      openSoilTypeCreationModal: false,
+      openSoilTypeUpdateModal: false,
+      openSoilTypeDeleteConfirm: false,
       modalError: '',
       rowToDelete: '',
       rowToEdit: {
         _id: '',
         name: '',
-        abbreviation: ''
+        country: {
+          _id: '',
+          name: '',
+          abbreviation: ''
+        }
       },
       deletiontargetId: '',
       deletionTargetName: '',
@@ -30,24 +33,28 @@ class CountryList extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.props.getAllCountries()
+    await this.props.getAllSoilTypes()
   }
 
-  toggleCountryCreationOpen = () => {
+  toggleSoilTypeCreationOpen = () => {
     this.setState({
       modalError: '',
-      openCountryCreationModal: !this.state.openCountryCreationModal
+      openSoilTypeCreationModal: !this.state.openSoilTypeCreationModal
     })
   }
 
-  closeCountryEditModal = () => {
+  closeSoilTypeEditModal = () => {
     this.setState({
       modalError: '',
-      openCountryUpdateModal: false,
+      openSoilTypeUpdateModal: false,
       rowToEdit: {
         _id: '',
         name: '',
-        abbreviation: ''
+        country: {
+          _id: '',
+          name: '',
+          abbreviation: ''
+        }
       }
     })
   }
@@ -56,43 +63,46 @@ class CountryList extends React.Component {
     this.props.history.push('/')
   }
 
-  handleSave = async (country) => {
-    await this.props.addCountry(country)
+  handleSave = async (soilType) => {
+    await this.props.addSoilType(soilType)
     if (!this.props.error) {
       this.setState({
-        openCountryCreationModal: false
+        openSoilTypeCreationModal: false
       })
       this.props.addUIMessage(
-        `Maa ${country.name} (${country.abbreviation}) luotu!`,
+        `Maaperä ${soilType.name} luotu!`,
         'success',
         10
       )
     } else {
       this.setState({
-        modalError: `Maan ${country.name} luonti epäonnistui!`
+        modalError: `Maaperän ${soilType.name} luonti epäonnistui!`
       })
     }
   }
 
-  handleUpdate = async (country) => {
-    await this.props.updateCountry(country)
+  handleUpdate = async (soilType) => {
+    await this.props.updateCountry(soilType)
     if (!this.props.error) {
       this.setState({
         openCountryUpdateModal: false,
         rowToEdit: {
           _id: '',
           name: '',
-          abbreviation: ''
+          country: {
+            name: '',
+            abbreviation: ''
+          }
         }
       })
       this.props.addUIMessage(
-        `Maa ${country.name} (${country.abbreviation}) päivitetty!`,
+        `Maaperä ${soilType.name} päivitetty!`,
         'success',
         10
       )
     } else {
       this.setState({
-        modalError: `Maan ${country.name} päivittäminen epäonnistui!`
+        modalError: `Maaperän ${soilType.name} päivittäminen epäonnistui!`
       })
     }
   }
@@ -102,7 +112,7 @@ class CountryList extends React.Component {
       onClick: (e) => {
         console.log('Row clicked', rowInfo)
         this.setState({
-          openCountryUpdateModal: true,
+          openSoilTypeUpdateModal: true,
           rowToEdit: rowInfo.original
         })
       }
@@ -115,21 +125,21 @@ class CountryList extends React.Component {
       rowToDelete: row,
       deletiontargetId: row._id,
       deletionTargetName: row.name,
-      openContryDeleteConfirm: true
+      openSoilTypeDeleteConfirm: true
     })
   }
 
   handleDeleteConfirmation = async (isConfirmed) => {
     if (isConfirmed) {
-      await this.props.deleteCountry(this.state.deletiontargetId)
+      await this.props.deleteSoilType(this.state.deletiontargetId)
       if (!this.props.error) {
-        this.props.addUIMessage(`Maa ${this.state.deletionTargetName} on poistettu!`, 'success', 10)
+        this.props.addUIMessage(`Maaperä ${this.state.deletionTargetName} on poistettu!`, 'success', 10)
       } else {
-        this.props.addUIMessage(`Maan ${this.state.deletionTargetName} poisto ei onnistunut!`, 'danger', 10)
+        this.props.addUIMessage(`Maaperän ${this.state.deletionTargetName} poisto ei onnistunut!`, 'danger', 10)
       }
     }
     this.setState({
-      openContryDeleteConfirm: false,
+      openSoilTypeDeleteConfirm: false,
       rowToDelete: '',
       deletionTargetName: '',
       deletiontargetId: ''
@@ -145,8 +155,8 @@ class CountryList extends React.Component {
       }
     },
     {
-      Header: 'Lyhenne',
-      accessor: 'abbreviation',
+      Header: 'Maa',
+      accessor: 'country.name',
       headerStyle: {
         textAlign: 'left'
       }
@@ -175,12 +185,12 @@ class CountryList extends React.Component {
   render() {
     return (
       <div>
-        <ViewHeader text='Maat' />
+        <ViewHeader text='Maaperätyypit' />
         <Button
           bsStyle='primary'
-          onClick={this.toggleCountryCreationOpen}
+          onClick={this.toggleSoilTypeCreationOpen}
         >
-          Lisää maa
+          Lisää maaperätyyppi
         </Button>
         <Button
           bsStyle='default'
@@ -190,33 +200,28 @@ class CountryList extends React.Component {
         </Button>
 
         <MalvaReactTable
-          data={this.props.countries}
+          data={this.props.soilTypes}
           columns={this.columns}
           getTrProps={this.handleRowClick}
           defaultPageSize={50}
           minRows={1}
         />
 
-        <CountryAdd
-          modalIsOpen={this.state.openCountryCreationModal}
-          closeModal={this.toggleCountryCreationOpen}
+        <SoilTypeAdd
+          modalIsOpen={this.state.openSoilTypeCreationModal}
+          closeModal={this.toggleSoilTypeCreationOpen}
           handleSave={this.handleSave}
           modalError={this.state.modalError}
         />
 
-        <CountryEdit
-          modalIsOpen={this.state.openCountryUpdateModal}
-          closeModal={this.closeCountryEditModal}
-          handleSave={this.handleUpdate}
-          modalError={this.state.modalError}
-          country={this.state.rowToEdit}
-        />
+
+
 
         <ConfirmDelete
-          modalIsOpen={this.state.openContryDeleteConfirm}
+          modalIsOpen={this.state.openSoilTypeDeleteConfirm}
           closeModal={this.handleDeleteConfirmation}
           headerText={'Vahvista poisto'}
-          bodyText={`Oletko varma että haluat poistaa maan ${this.state.deletionTargetName}`}
+          bodyText={`Oletko varma että haluat poistaa maaperän ${this.state.deletionTargetName}`}
           isDangerous={true}
         />
       </div>
@@ -226,21 +231,21 @@ class CountryList extends React.Component {
 
 const mapStateToProps = store => {
   return {
-    countries: store.countries.items,
-    loading: store.countries.loading,
-    creating: store.countries.creating,
-    deleting: store.countries.deleting,
-    error: store.countries.error
+    soilTypes: store.soilTypes.items,
+    loading: store.soilTypes.loading,
+    creating: store.soilTypes.creating,
+    deleting: store.soilTypes.deleting,
+    error: store.soilTypes.error
   }
 }
 
 export default withRouter(connect(
   mapStateToProps,
   {
-    getAllCountries,
-    addCountry,
-    updateCountry,
-    deleteCountry,
+    getAllSoilTypes,
+    addSoilType,
+    updateSoilType,
+    deleteSoilType,
     addUIMessage
   }
-)(CountryList))
+)(SoilTypeList))
