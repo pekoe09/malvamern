@@ -59,9 +59,9 @@ const deleteSoilTypeBegin = () => ({
   type: SOILTYPE_DELETE_BEGIN
 })
 
-const deleteSoilTypeSuccess = soilType => ({
+const deleteSoilTypeSuccess = id => ({
   type: SOILTYPE_DELETE_SUCCESS,
-  payload: { soilType }
+  payload: { id }
 })
 
 const deleteSoilTypeFailure = error => ({
@@ -112,8 +112,8 @@ export const deleteSoilType = (id) => {
   return async (dispatch) => {
     dispatch(deleteSoilTypeBegin())
     try {
-      const soilType = await soilTypeService.removeSoilType(id)
-      dispatch(deleteSoilTypeSuccess(soilType))
+      await soilTypeService.removeSoilType(id)
+      dispatch(deleteSoilTypeSuccess(id))
     } catch (error) {
       console.log(error)
       dispatch(deleteSoilTypeFailure(error))

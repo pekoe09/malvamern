@@ -10,15 +10,12 @@ class SoilTypeAdd extends React.Component {
     super(props)
     this.state = {
       name: '',
-      country: {
-        name: '',
-        abbreviation: ''
-      },
+      countryId: '',
       touched: {
         name: false,
         country: false
       },
-      selectedCountry: ''
+      selectedCountry: null
     }
   }
 
@@ -28,7 +25,8 @@ class SoilTypeAdd extends React.Component {
 
   handleCountryChange = (country) => {
     this.setState({
-      country
+      selectedCountry: country,
+      countryId: country[0]._id
     })
   }
 
@@ -45,7 +43,7 @@ class SoilTypeAdd extends React.Component {
     event.preventDefault()
     const soilType = {
       name: this.state.name,
-      country: this.state.country
+      countryId: this.state.countryId
     }
     await this.props.handleSave(soilType)
   }
@@ -57,21 +55,19 @@ class SoilTypeAdd extends React.Component {
   handleExit = () => {
     this.setState({
       name: '',
-      country: {
-        name: '',
-        abbreviation: ''
-      },
+      countryId: '',
       touched: {
         name: false,
         country: false
-      }
+      },
+      selectedCountry: null
     })
   }
 
   validate = () => {
     return {
       name: !this.state.name,
-      country: !this.state.contry.name
+      country: !this.state.countryId
     }
   }
 
@@ -115,9 +111,9 @@ class SoilTypeAdd extends React.Component {
                 options={this.props.countries}
                 onChange={(selected) => { this.handleCountryChange(selected) }}
                 selected={this.state.selectedCountry}
-                labelKey='country'
+                labelKey='name'
                 ignoreDiacritics={false}
-                minLength={3}
+                minLength={1}
                 selectHintOnEnter={true}
               />
             </FormGroup>

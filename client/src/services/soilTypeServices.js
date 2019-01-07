@@ -24,8 +24,8 @@ const updateSoilType = async (soilType) => {
 
 const removeSoilType = async (id) => {
   console.log('Removing (soilTypeServices.js)', id)
-  const response = await axios.delete(`${baseUrl}/${id}`)
-  console.log('Received (soilTypeServices.js):', response.data, getConfig())
+  const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
+  console.log('Received (soilTypeServices.js):', response.data)
   return response.data
 }
 

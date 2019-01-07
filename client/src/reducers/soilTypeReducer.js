@@ -72,7 +72,7 @@ const soilTypeReducer = (store = initialState, action) => {
       const updated = action.payload.soilType
       return {
         ...store,
-        items: store.items.map(c => c.id === updated.id ? updated : c),
+        items: store.items.map(s => s._id === updated._id ? updated : s),
         updating: false,
         error: null
       }
@@ -91,7 +91,7 @@ const soilTypeReducer = (store = initialState, action) => {
     case SOILTYPE_DELETE_SUCCESS:
       return {
         ...store,
-        items: store.items.filter(c => c.id !== action.payload.soilType.id),
+        items: store.items.filter(s => s._id !== action.payload.id),
         deleting: false,
         error: null
       }
