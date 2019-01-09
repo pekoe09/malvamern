@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap'
 import { MalvaReactTable } from '../common/MalvaStyledComponents'
 import ViewHeader from '../common/ViewHeader'
 import SoilTypeAdd from './soilTypeAdd'
+import SoilTypeEdit from './soilTypeEdit'
 import ConfirmDelete from '../common/ConfirmDelete'
 import { getAllSoilTypes, addSoilType, updateSoilType, deleteSoilType } from '../../actions/soilTypeActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
@@ -82,10 +83,10 @@ class SoilTypeList extends React.Component {
   }
 
   handleUpdate = async (soilType) => {
-    await this.props.updateCountry(soilType)
+    await this.props.updateSoilType(soilType)
     if (!this.props.error) {
       this.setState({
-        openCountryUpdateModal: false,
+        openSoilTypeUpdateModal: false,
         rowToEdit: {
           _id: '',
           name: '',
@@ -110,7 +111,6 @@ class SoilTypeList extends React.Component {
   handleRowClick = (state, rowInfo) => {
     return {
       onClick: (e) => {
-        console.log('Row clicked', rowInfo)
         this.setState({
           openSoilTypeUpdateModal: true,
           rowToEdit: rowInfo.original
@@ -214,8 +214,13 @@ class SoilTypeList extends React.Component {
           modalError={this.state.modalError}
         />
 
-
-
+        <SoilTypeEdit
+          modalIsOpen={this.state.openSoilTypeUpdateModal}
+          closeModal={this.closeSoilTypeEditModal}
+          handleSave={this.handleUpdate}
+          modalError={this.state.modalError}
+          soilType={this.state.rowToEdit}
+        />
 
         <ConfirmDelete
           modalIsOpen={this.state.openSoilTypeDeleteConfirm}

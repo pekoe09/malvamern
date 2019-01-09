@@ -91,7 +91,7 @@ class CountryEdit extends React.Component {
         onExit={this.handleExit}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Päivitä tietoja</Modal.Title>
+          <Modal.Title>Päivitä maata</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {this.props.modalError && <Alert bsStyle='danger'>{this.props.modalError}</Alert>}
