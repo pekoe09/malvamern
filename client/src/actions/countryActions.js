@@ -1,4 +1,4 @@
-import countryService from '../services/countryServices'
+import entityService from '../services/entityServices'
 
 export const COUNTRIES_GETALL_BEGIN = 'COUNTRIES_GETALL_BEGIN'
 export const COUNTRIES_GETALL_SUCCESS = 'COUNTRIES_GETALL_SUCCESS'
@@ -73,7 +73,7 @@ export const getAllCountries = () => {
   return async (dispatch) => {
     dispatch(getAllCountriesBegin())
     try {
-      const countries = await countryService.getAll()
+      const countries = await entityService.getAll('countries')
       dispatch(getAllCountriesSuccess(countries))
     } catch (error) {
       console.log(error)
@@ -86,7 +86,7 @@ export const addCountry = (country) => {
   return async (dispatch) => {
     dispatch(addCountryBegin())
     try {
-      country = await countryService.addCountry(country)
+      country = await entityService.addEntity('countries', country)
       dispatch(addCountrySuccess(country))
     } catch (error) {
       console.log(error)
@@ -99,7 +99,7 @@ export const updateCountry = (country) => {
   return async (dispatch) => {
     dispatch(updateCountryBegin())
     try {
-      country = await countryService.updateCountry(country)
+      country = await entityService.updateEntity('countries', country)
       dispatch(updateCountrySuccess(country))
     } catch (error) {
       console.log(error)
@@ -112,7 +112,7 @@ export const deleteCountry = (id) => {
   return async (dispatch) => {
     dispatch(deleteCountryBegin())
     try {
-      await countryService.removeCountry(id)
+      await entityService.removeEntity('countries', id)
       dispatch(deleteCountrySuccess(id))
     } catch (error) {
       console.log(error)

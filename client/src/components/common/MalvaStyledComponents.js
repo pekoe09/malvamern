@@ -1,22 +1,64 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import ReactTable from 'react-table'
-import { Form, ControlLabel } from 'react-bootstrap'
+import { Form, FormGroup, ControlLabel, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const MalvaReactTable = styled(ReactTable)`
-  margin: 10px;
-`
+    margin: 10px;
+  `
 
 const MalvaForm = styled(Form)`
-    font-family: 'sans serif'
+    font-family: 'sans serif';
+    margin-top: 5px;
   `
 
 const MalvaControlLabel = styled(ControlLabel)`
-    font-weight: 500
+    font-weight: 500;
   `
+
+const MalvaFormGroup = styled(FormGroup)`
+    margin-bottom: 5px;
+  `
+
+const MalvaLink = styled(Link)`
+    color: white;
+    text-decoration: none;
+    display: inline;
+    width: 100%;
+    height: 100%;
+
+    &:hover, &:focus, &:visited, &:link, &:active {
+      text-decoration: none;
+      color: white;
+    }   
+  `
+
+const MalvaButton = styled(Button)`
+    color: white;
+    background-color: darkgreen;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    ${props => props.btntype === 'default' && css`
+      background-color: lightgrey;
+      color: black;  
+    `}
+  `
+
+const MalvaLinkButton = ({ text, to, btnType }) => {
+  return (
+    <MalvaLink to={to}>
+      <MalvaButton btntype={btnType}>{text}</MalvaButton>
+    </MalvaLink>
+  )
+}
 
 export {
   MalvaReactTable,
   MalvaForm,
-  MalvaControlLabel
+  MalvaControlLabel,
+  MalvaFormGroup,
+  MalvaLink,
+  MalvaButton,
+  MalvaLinkButton
 }

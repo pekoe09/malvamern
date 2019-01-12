@@ -1,4 +1,4 @@
-import soilTypeService from '../services/soilTypeServices'
+import entityService from '../services/entityServices'
 
 export const SOILTYPES_GETALL_BEGIN = 'SOILTYPES_GETALL_BEGIN'
 export const SOILTYPES_GETALL_SUCCESS = 'SOILTYPES_GETALL_SUCCESS'
@@ -73,7 +73,7 @@ export const getAllSoilTypes = () => {
   return async (dispatch) => {
     dispatch(getAllSoilTypesBegin())
     try {
-      const soilTypes = await soilTypeService.getAll()
+      const soilTypes = await entityService.getAll('soiltypes')
       dispatch(getAllSoilTypesSuccess(soilTypes))
     } catch (error) {
       console.log(error)
@@ -86,7 +86,7 @@ export const addSoilType = (soilType) => {
   return async (dispatch) => {
     dispatch(addSoilTypeBegin())
     try {
-      soilType = await soilTypeService.addSoilType(soilType)
+      soilType = await entityService.addEntity('soiltypes', soilType)
       dispatch(addSoilTypeSuccess(soilType))
     } catch (error) {
       console.log(error)
@@ -99,7 +99,7 @@ export const updateSoilType = (soilType) => {
   return async (dispatch) => {
     dispatch(updateSoilTypeBegin())
     try {
-      soilType = await soilTypeService.updateSoilType(soilType)
+      soilType = await entityService.updateEntity('soiltypes', soilType)
       dispatch(updateSoilTypeSuccess(soilType))
     } catch (error) {
       console.log(error)
@@ -112,7 +112,7 @@ export const deleteSoilType = (id) => {
   return async (dispatch) => {
     dispatch(deleteSoilTypeBegin())
     try {
-      await soilTypeService.removeSoilType(id)
+      await entityService.removeEntity('soiltypes', id)
       dispatch(deleteSoilTypeSuccess(id))
     } catch (error) {
       console.log(error)
