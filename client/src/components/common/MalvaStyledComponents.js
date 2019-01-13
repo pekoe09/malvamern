@@ -34,6 +34,19 @@ const MalvaLink = styled(Link)`
     }   
   `
 
+const MalvaVerticalLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+  display: inline-grid;
+  width: 100%;
+  height: 100%;
+
+  &:hover, &:focus, &:visited, &:link, &:active {
+    text-decoration: none;
+    color: white;
+  }   
+`
+
 const MalvaButton = styled(Button)`
     color: white;
     background-color: darkgreen;
@@ -54,6 +67,14 @@ const MalvaLinkButton = ({ text, to, btnType }) => {
   )
 }
 
+const MalvaVerticalLinkButton = ({ text, to, btnType }) => {
+  return (
+    <MalvaVerticalLink to={to}>
+      <MalvaButton btntype={btnType}>{text}</MalvaButton>
+    </MalvaVerticalLink>
+  )
+}
+
 export {
   MalvaReactTable,
   MalvaForm,
@@ -61,5 +82,6 @@ export {
   MalvaFormGroup,
   MalvaLink,
   MalvaButton,
-  MalvaLinkButton
+  MalvaLinkButton,
+  MalvaVerticalLinkButton
 }

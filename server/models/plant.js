@@ -96,15 +96,39 @@ plantSchema.virtual('width').get(function () {
 })
 
 plantSchema.virtual('planting').get(function () {
-  return this.plantingTo ? `${this.plantingFrom.number} - ${this.plantingTo.number}` : this.plantingFrom.number
+  if(this.plantingFrom && this.plantingTo) {
+    return `${this.plantingFrom.number} - ${this.plantingTo.number}`
+  } else if (this.plantingFrom) {
+    return this.plantingFrom
+  } else if (this.plantingTo) {
+    return this.plantingTo
+  } else {
+    return null
+  }
 })
 
 plantSchema.virtual('flowering').get(function () {
-  return this.floweringTo ? `${this.floweringFrom.number} - ${this.floweringTo.number}` : this.floweringFrom.number
+  if(this.floweringFrom && this.floweringTo) {
+    return `${this.floweringFrom.number} - ${this.floweringTo.number}`
+  } else if (this.floweringFrom) {
+    return this.floweringFrom
+  } else if (this.floweringTo) {
+    return this.floweringTo
+  } else {
+    return null
+  }
 })
 
-plantSchema.virtual('harvest').get(function () {
-  return this.harvestTo ? `${this.harvestFrom.number} - ${this.harvestTo.number}` : this.harvestFrom.number
+plantSchema.virtual('flowering').get(function () {
+  if(this.harvestFrom && this.harvestTo) {
+    return `${this.harvestFrom.number} - ${this.harvestTo.number}`
+  } else if (this.harvestFrom) {
+    return this.harvestFrom
+  } else if (this.harvestTo) {
+    return this.harvestTo
+  } else {
+    return null
+  }
 })
 
 plantSchema.set('toObject', { virtuals: true })

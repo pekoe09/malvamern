@@ -20,7 +20,6 @@ class App extends React.Component {
         <Route exact path='/plants/add' render={() => <PlantAdd />} />
         <Route exact path='/register' render={() => <Registration />} />
         <Route exact path='/soiltypes' render={() => <SoilTypeList />} />
-        <div>Nothing to see here, disperse!</div>
       </MalvaLayout>
     )
   }

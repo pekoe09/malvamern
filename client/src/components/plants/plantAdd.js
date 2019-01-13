@@ -142,7 +142,6 @@ class PlantAdd extends React.Component {
     }
     delete plant.touched
     plant.flowerColors = this.state.flowerColors.map(c => c.value)
-    console.log('Saving', plant)
     await this.props.addPlant(plant)
     if (!this.props.error) {
       this.props.addUIMessage(
@@ -150,6 +149,7 @@ class PlantAdd extends React.Component {
         'success',
         10
       )
+      this.props.history.push('/plants')
     } else {
       this.props.addUIMessage(
         `Kasvia ${plant.name} ei pystytty tallentamaan!`,

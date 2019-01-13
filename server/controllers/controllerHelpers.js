@@ -55,10 +55,12 @@ const validateNonNegativeFields = (req, fieldNames, entity, operation) => {
 const validateMonthNumbers = (req, fieldNames, entity, operation) => {
   fieldNames.forEach(f => {
     const value = req.body[f]
-    if (isNaN.value || isNaN(parseInt(value)) || value < 1 || value > 12) {
-      let err = new Error(`The value for ${f} is not an integer between 1 and 12 (trying to ${operation} ${entity})`)
-      err.isBadRequest = true
-      throw err
+    if (value !== "") {
+      if (isNaN.value || isNaN(parseInt(value)) || value < 1 || value > 12) {
+        let err = new Error(`The value for ${f} is not an integer between 1 and 12 (trying to ${operation} ${entity})`)
+        err.isBadRequest = true
+        throw err
+      }
     }
   })
 }

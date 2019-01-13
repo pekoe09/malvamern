@@ -27,20 +27,32 @@ class PlantList extends React.Component {
     return this.props.plants.map(p =>
       <PlantListItem
         plant={p}
-      />)
+        key={p._id}
+        handleDelete={() => this.handleDelete(p._id)}
+      />
+    )
+  }
+
+  handleDelete = (_id) => {
+    console.log('Deleting ', _id)
   }
 
   render() {
     return (
       <div>
-        <ViewHeader text='Kasvilista' />
-        <MalvaLinkButton
-          text='Lisää kasvi'
-          to='/plants/add'
-          btnType='primary'
-        />
+        <div style={{ marginBottom: 10 }}>
+          <ViewHeader text='Kasvilista' />
+          <MalvaLinkButton
+            text='Lisää kasvi'
+            to='/plants/add'
+            btnType='primary'
+          />
+        </div>
         {this.props.plants.length === 0 &&
           <EmptyListNote text='Kasveja ei löydy' />
+        }
+        {this.props.plants.length > 0 &&
+          <h4>{`Löytyi ${this.props.plants.length} kasvia`}</h4>
         }
         {this.mapPlantsToItems()}
       </div>

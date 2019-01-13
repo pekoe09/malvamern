@@ -46,11 +46,11 @@ plantRouter.post('/', wrapAsync(async (req, res, next) => {
     plantDistance: req.body.plantDistance,
     plantDepth: req.body.plantDepth,
     soilTypes: req.body.soilTypes,
-    plantingFrom: { number: req.body.plantingFrom },
+    plantingFrom: req.body.plantingFrom ? { number: req.body.plantingFrom } : null,
     plantingTo: req.body.plantingTo ? { number: req.body.plantingTo } : null,
-    floweringFrom: { number: req.body.floweringFrom },
+    floweringFrom: req.body.floweringFrom ? { number: req.body.floweringFrom } : null,
     floweringTo: req.body.floweringTo ? { number: req.body.floweringTo } : null,
-    harvestFrom: { number: req.body.harvestFrom },
+    harvestFrom: req.body.harvestFrom ? { number: req.body.harvestFrom } : null,
     harvestTo: req.body.harvestTo ? { number: req.body.harvestTo } : null,
     flowerColors: req.body.flowerColors,
     isPoisonous: req.body.isPoisonous,
@@ -60,6 +60,7 @@ plantRouter.post('/', wrapAsync(async (req, res, next) => {
     environmentRequirements: req.body.environmentRequirements,
     careInstructions: req.body.careInstructions
   })
+  console.log('saving', plant)
   plant = await plant.save()
   res.status(201).json(plant)
 }))
