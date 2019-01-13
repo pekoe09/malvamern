@@ -38,6 +38,7 @@ const MalvaButton = styled(Button)`
     color: white;
     background-color: darkgreen;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-right: 5px;
 
     ${props => props.btntype === 'default' && css`
       background-color: lightgrey;
