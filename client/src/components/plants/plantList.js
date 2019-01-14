@@ -5,6 +5,7 @@ import ViewHeader from '../common/ViewHeader'
 import EmptyListNote from '../common/EmptyListNote'
 import { MalvaLinkButton } from '../common/MalvaStyledComponents'
 import PlantListItem from './plantListItem'
+import Pagination from '../common/Pagination'
 import { getAllPlants, deletePlant } from '../../actions/plantActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
@@ -37,6 +38,10 @@ class PlantList extends React.Component {
     console.log('Deleting ', _id)
   }
 
+  handlePageChange = () => {
+
+  }
+
   render() {
     return (
       <div>
@@ -55,6 +60,12 @@ class PlantList extends React.Component {
           <h4>{`Löytyi ${this.props.plants.length} kasvia`}</h4>
         }
         {this.mapPlantsToItems()}
+        <Pagination
+          totalRecords={87}
+          pageLimit={10}
+          pageNeighbours={2}
+          onPageChange={this.handlePageChange}
+        />
       </div>
     )
   }
