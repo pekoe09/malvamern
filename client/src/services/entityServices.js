@@ -3,8 +3,18 @@ import { getConfig } from './servicehelpers'
 
 const baseUrl = '/api/'
 
+const getCount = async (entityPlural) => {
+  const response = await axios.get(`${baseUrl}/${entityPlural}/count`)
+  return response.data
+}
+
 const getAll = async (entityPlural) => {
   const response = await axios.get(`${baseUrl}/${entityPlural}`)
+  return response.data
+}
+
+const getByPage = async (entityPlural, page, limit, criteria) => {
+  const response = await axios.get(`${baseUrl}/${entityPlural}?page=${page}&limit=${limit}`)
   return response.data
 }
 
@@ -30,7 +40,9 @@ const removeEntity = async (entityPlural, id) => {
 }
 
 export default {
+  getCount,
   getAll,
+  getByPage,
   addEntity,
   updateEntity,
   removeEntity

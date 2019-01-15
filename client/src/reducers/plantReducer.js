@@ -1,7 +1,13 @@
 import {
+  PLANTS_GETCOUNT_BEGIN,
+  PLANTS_GETCOUNT_SUCCESS,
+  PLANTS_GETCOUNT_FAILURE,
   PLANTS_GETALL_BEGIN,
   PLANTS_GETALL_SUCCESS,
   PLANTS_GETALL_FAILURE,
+  PLANTS_GETBYPAGE_BEGIN,
+  PLANTS_GETBYPAGE_SUCCESS,
+  PLANTS_GETBYPAGE_FAILURE,
   PLANT_CREATE_BEGIN,
   PLANT_CREATE_SUCCESS,
   PLANT_CREATE_FAILURE,
@@ -15,6 +21,7 @@ import {
 
 const initialState = {
   items: [],
+  count: 0,
   loading: false,
   creating: false,
   updating: false,
@@ -24,6 +31,25 @@ const initialState = {
 
 const plantReducer = (store = initialState, action) => {
   switch (action.type) {
+    case PLANTS_GETCOUNT_BEGIN:
+      return {
+        ...store,
+        loading: true,
+        error: null
+      }
+    case PLANTS_GETCOUNT_SUCCESS:
+      return {
+        ...store,
+        count: action.payload.count,
+        loading: false,
+        error: null
+      }
+    case PLANTS_GETCOUNT_FAILURE:
+      return {
+        ...store,
+        loading: false,
+        error: action.payload.error
+      }
     case PLANTS_GETALL_BEGIN:
       return {
         ...store,
@@ -38,6 +64,25 @@ const plantReducer = (store = initialState, action) => {
         error: null
       }
     case PLANTS_GETALL_FAILURE:
+      return {
+        ...store,
+        loading: false,
+        error: action.payload.error
+      }
+    case PLANTS_GETBYPAGE_BEGIN:
+      return {
+        ...store,
+        loading: true,
+        error: null
+      }
+    case PLANTS_GETBYPAGE_SUCCESS:
+      return {
+        ...store,
+        items: action.payload.plants,
+        loading: false,
+        error: null
+      }
+    case PLANTS_GETBYPAGE_FAILURE:
       return {
         ...store,
         loading: false,

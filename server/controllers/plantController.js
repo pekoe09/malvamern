@@ -12,10 +12,26 @@ const SoilType = require('../models/soilType')
 
 plantRouter.get('/', wrapAsync(async (req, res, next) => {
   let plants = []
-  plants = await Plant
-    .find({})
-    .sort('name')
+  if (req.query.page) {
+    const page = !isNaN(Number.parseInt(req.query.page)) ? Number.parseInt(req.query.page) : 1
+    const limit = req.query.limit && !isNaN(Number.parseInt(req.query.limit)) ? Number.parseInt(req.query.limit) : 50
+    console.log('Getting plants: ' + page + ' / ' + limit)
+    plants = await Plant
+      .find({})
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort('name')
+  } else {
+    plants = await Plant
+      .find({})
+      .sort('name')
+  }
   res.json(plants)
+}))
+
+plantRouter.get('/count', wrapAsync(async (req, res, next) => {
+  const count = await Plant.countDocuments({})
+  res.json(count)
 }))
 
 plantRouter.post('/', wrapAsync(async (req, res, next) => {

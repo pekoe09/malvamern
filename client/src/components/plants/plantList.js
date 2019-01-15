@@ -5,8 +5,8 @@ import ViewHeader from '../common/ViewHeader'
 import EmptyListNote from '../common/EmptyListNote'
 import { MalvaLinkButton } from '../common/MalvaStyledComponents'
 import PlantListItem from './plantListItem'
-import Pagination from '../common/Pagination'
-import { getAllPlants, deletePlant } from '../../actions/plantActions'
+import MalvaPagination from '../common/MalvaPagination'
+import { getAllPlants, getPlantCount, getPlantsByPage, deletePlant } from '../../actions/plantActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantList extends React.Component {
@@ -21,7 +21,8 @@ class PlantList extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.props.getAllPlants()
+    await this.props.getPlantsByPage(1, 2, null)
+    await this.props.getPlantCount()
   }
 
   mapPlantsToItems = () => {
@@ -38,8 +39,9 @@ class PlantList extends React.Component {
     console.log('Deleting ', _id)
   }
 
-  handlePageChange = () => {
-
+  handlePageChange = async (page) => {
+    console.log('changing to page ', page)
+    await this.props.getPlantsByPage(page, 2, null)
   }
 
   render() {
@@ -57,12 +59,12 @@ class PlantList extends React.Component {
           <EmptyListNote text='Kasveja ei löydy' />
         }
         {this.props.plants.length > 0 &&
-          <h4>{`Löytyi ${this.props.plants.length} kasvia`}</h4>
+          <h4>{`Löytyi ${this.props.count} kasvia`}</h4>
         }
         {this.mapPlantsToItems()}
-        <Pagination
-          totalRecords={87}
-          pageLimit={10}
+        <MalvaPagination
+          totalRecords={this.props.count}
+          pageLimit={2}
           pageNeighbours={2}
           onPageChange={this.handlePageChange}
         />
@@ -72,13 +74,16 @@ class PlantList extends React.Component {
 }
 
 const mapStateToProps = store => ({
-  plants: store.plants.items
+  plants: store.plants.items,
+  count: store.plants.count
 })
 
 export default withRouter(connect(
   mapStateToProps,
   {
+    getPlantCount,
     getAllPlants,
+    getPlantsByPage,
     deletePlant,
     addUIMessage
   }
