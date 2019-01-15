@@ -8,6 +8,11 @@ const getCount = async (entityPlural) => {
   return response.data
 }
 
+const getOne = async (entityPlural, id) => {
+  const response = await axios.get(`${baseUrl}/${entityPlural}/details/${id}`)
+  return response.data
+}
+
 const getAll = async (entityPlural) => {
   const response = await axios.get(`${baseUrl}/${entityPlural}`)
   return response.data
@@ -41,6 +46,7 @@ const removeEntity = async (entityPlural, id) => {
 
 export default {
   getCount,
+  getOne,
   getAll,
   getByPage,
   addEntity,

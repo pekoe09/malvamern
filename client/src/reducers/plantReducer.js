@@ -8,6 +8,9 @@ import {
   PLANTS_GETBYPAGE_BEGIN,
   PLANTS_GETBYPAGE_SUCCESS,
   PLANTS_GETBYPAGE_FAILURE,
+  PLANT_GET_BEGIN,
+  PLANT_GET_SUCCESS,
+  PLANT_GET_FAILURE,
   PLANT_CREATE_BEGIN,
   PLANT_CREATE_SUCCESS,
   PLANT_CREATE_FAILURE,
@@ -21,6 +24,7 @@ import {
 
 const initialState = {
   items: [],
+  cache: [],
   count: 0,
   loading: false,
   creating: false,
@@ -45,6 +49,26 @@ const plantReducer = (store = initialState, action) => {
         error: null
       }
     case PLANTS_GETCOUNT_FAILURE:
+      return {
+        ...store,
+        loading: false,
+        error: action.payload.error
+      }
+    case PLANT_GET_BEGIN:
+      return {
+        ...store,
+        loading: true,
+        error: null
+      }
+    case PLANT_GET_SUCCESS:
+      const match = store.cache.find(p => p._id === action.payload.plant._id)
+      return {
+        ...store,
+        loading: false,
+        error: null,
+        cache: match ? store.cache : store.cache.concat(action.payload.plant)
+      }
+    case PLANT_GET_FAILURE:
       return {
         ...store,
         loading: false,

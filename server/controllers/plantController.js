@@ -34,6 +34,11 @@ plantRouter.get('/count', wrapAsync(async (req, res, next) => {
   res.json(count)
 }))
 
+plantRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
+  const plant = await Plant.findById(req.params.id)
+  res.json(plant)
+}))
+
 plantRouter.post('/', wrapAsync(async (req, res, next) => {
   checkUser(req)
   const mandatories = ['name', 'scientificName', 'heightMin', 'widthMin',

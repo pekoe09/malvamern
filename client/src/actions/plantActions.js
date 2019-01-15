@@ -9,6 +9,9 @@ export const PLANTS_GETALL_FAILURE = 'PLANTS_GETALL_FAILURE'
 export const PLANTS_GETBYPAGE_BEGIN = 'PLANTS_GETBYPAGE_BEGIN'
 export const PLANTS_GETBYPAGE_SUCCESS = 'PLANTS_GETBYPAGE_SUCCESS'
 export const PLANTS_GETBYPAGE_FAILURE = 'PLANTS_GETBYPAGE_FAILURE'
+export const PLANT_GET_BEGIN = 'PLANT_GET_BEGIN'
+export const PLANT_GET_SUCCESS = 'PLANT_GET_SUCCESS'
+export const PLANT_GET_FAILURE = 'PLANT_GET_FAILURE'
 export const PLANT_CREATE_BEGIN = 'PLANTS_CREATE_BEGIN'
 export const PLANT_CREATE_SUCCESS = 'PLANT_CREATE_SUCCESS'
 export const PLANT_CREATE_FAILURE = 'PLANT_CREATE_FAILURE'
@@ -58,6 +61,20 @@ const getPlantsByPageSuccess = plants => ({
 
 const getPlantsByPageFailure = error => ({
   type: PLANTS_GETBYPAGE_FAILURE,
+  payload: { error }
+})
+
+const getPlantBegin = () => ({
+  type: PLANT_GET_BEGIN
+})
+
+const getPlantSuccess = plant => ({
+  type: PLANT_GET_SUCCESS,
+  payload: { plant }
+})
+
+const getPlantFailure = error => ({
+  type: PLANT_GET_FAILURE,
   payload: { error }
 })
 
@@ -131,15 +148,26 @@ export const getAllPlants = () => {
 
 export const getPlantsByPage = (page, limit, criteria) => {
   return async (dispatch) => {
-    console.log('GetPlants triggered')
     dispatch(getPlantsByPageBegin())
     try {
       const plants = await entityService.getByPage('plants', page, limit, criteria)
-      console.log('Got plants:', plants)
       dispatch(getPlantsByPageSuccess(plants))
     } catch (error) {
       console.log(error)
       dispatch(getPlantsByPageFailure(error))
+    }
+  }
+}
+
+export const getPlant = (_id) => {
+  return async (dispatch) => {
+    dispatch(getPlantBegin())
+    try {
+      const plant = await entityService.getOne('plants', _id)
+      dispatch(getPlantSuccess(plant))
+    } catch (error) {
+      console.log(error)
+      dispatch(getPlantFailure(error))
     }
   }
 }
