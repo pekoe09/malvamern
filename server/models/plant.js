@@ -119,7 +119,7 @@ plantSchema.virtual('flowering').get(function () {
   }
 })
 
-plantSchema.virtual('flowering').get(function () {
+plantSchema.virtual('harvest').get(function () {
   if(this.harvestFrom && this.harvestTo) {
     return `${this.harvestFrom.number} - ${this.harvestTo.number}`
   } else if (this.harvestFrom) {
