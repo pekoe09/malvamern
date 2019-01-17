@@ -6,7 +6,12 @@ import EmptyListNote from '../common/EmptyListNote'
 import { MalvaLinkButton } from '../common/MalvaStyledComponents'
 import PlantListItem from './plantListItem'
 import MalvaPagination from '../common/MalvaPagination'
-import { getAllPlants, getPlantCount, getPlantsByPage, deletePlant } from '../../actions/plantActions'
+import {
+  getAllPlants,
+  getPlantCount,
+  getPlantsByPage,
+  deletePlant
+} from '../../actions/plantActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantList extends React.Component {
@@ -14,9 +19,7 @@ class PlantList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      rowToDelete: '',
-      deletionTargetId: '',
-      deletionTargetName: ''
+
     }
   }
 
@@ -30,17 +33,32 @@ class PlantList extends React.Component {
       <PlantListItem
         plant={p}
         key={p._id}
-        handleDelete={() => this.handleDelete(p._id)}
+        handleDelete={() => this.handleDelete(p._id, p.name)}
       />
     )
   }
 
-  handleDelete = (_id) => {
+  handleDelete = async (_id, name) => {
     console.log('Deleting ', _id)
+    await this.props.deletePlant(_id)
+    if (!this.props.error) {
+      this.props.addUIMessage(
+        `Kasvi ${name} poistettu!`,
+        'success',
+        10
+      )
+      await this.props.getPlantCount()
+      this.props.history.push('/plants')
+    } else {
+      this.props.addUIMessage(
+        `Kasvia ${name} ei pystytty poistamaan!`,
+        'danger',
+        10
+      )
+    }
   }
 
   handlePageChange = async (page) => {
-    console.log('changing to page ', page)
     await this.props.getPlantsByPage(page, 2, null)
   }
 

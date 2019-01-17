@@ -57,6 +57,50 @@ const MalvaButton = styled(Button)`
       background-color: lightgrey;
       color: black;  
     `}
+
+      ${props => props.btntype === 'danger' && css`
+        background: white;
+        color: indianred;
+        border-style: solid;
+        border-color: indianred;
+        border-width: 1.5px;
+        
+      &:hover, &:focus {
+        background: pink;
+        color: indianred;
+        border-color: indianred;
+        outline: none;
+      }
+      &:active:focus {
+        background: pink;
+        color: indianred;
+        border-color: indianred;
+        outline: none;
+      }
+    `}
+  
+      ${props => props.btntype === 'rowdanger' && css`
+        background: white;
+        color: indianred;
+        border-style: solid;
+        border-color: indianred;
+        border-width: 1.5px;
+        font-size: 0.8em;
+        font-weight: 700;
+        
+      &:hover, &:focus {
+        background: white;
+        color: indianred;
+        border-color: indianred;
+        outline: none;
+      }
+      &:active:focus {
+        background: pink;
+        color: indianred;
+        border-color: indianred;
+        outline: none;
+      }
+    `}
   `
 
 const MalvaLinkButton = ({ text, to, btnType }) => {

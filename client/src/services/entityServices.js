@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getConfig } from './servicehelpers'
 
-const baseUrl = '/api/'
+const baseUrl = '/api'
 
 const getCount = async (entityPlural) => {
   const response = await axios.get(`${baseUrl}/${entityPlural}/count`)

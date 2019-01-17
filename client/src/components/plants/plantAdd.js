@@ -7,7 +7,7 @@ import NumberEntryField from '../common/NumberEntryField'
 import ViewHeader from '../common/ViewHeader'
 import colorList from './colorList'
 import Select from 'react-select'
-import { addPlant } from '../../actions/plantActions'
+import { addPlant, getPlantCount } from '../../actions/plantActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantAdd extends React.Component {
@@ -149,6 +149,7 @@ class PlantAdd extends React.Component {
         'success',
         10
       )
+      await this.props.getPlantCount()
       this.props.history.push('/plants')
     } else {
       this.props.addUIMessage(
@@ -157,7 +158,6 @@ class PlantAdd extends React.Component {
         10
       )
     }
-
   }
 
   validate = () => {
@@ -544,6 +544,7 @@ export default withRouter(connect(
   mapStateToProps,
   {
     addPlant,
-    addUIMessage
+    addUIMessage,
+    getPlantCount
   }
 )(PlantAdd))

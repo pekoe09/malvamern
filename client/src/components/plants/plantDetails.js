@@ -2,14 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Col, Row } from 'react-bootstrap'
-import ViewHeader from '../common/ViewHeader'
+import { MalvaLinkButton, MalvaButton } from '../common/MalvaStyledComponents'
 import {
   MalvaPlantHeader,
   MalvaPlantSubHeader,
-  MalvaPlantSectionHeader,
-  MalvaPlantFieldHeader
+  MalvaPlantSectionHeader
 } from '../common/MalvaElements'
-import { getPlant } from '../../actions/plantActions'
+import { getPlant, deletePlant, getPlantCount } from '../../actions/plantActions'
+import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantDetails extends React.Component {
 
@@ -24,9 +24,8 @@ class PlantDetails extends React.Component {
     const id = this.props.match.params.id
     let plant = this.props.plantCache.find(p => p._id === id)
     if (!plant) {
-      console.log('querying plant')
-      plant = await this.props.getPlant(id)
-      console.log('got plant', plant)
+      await this.props.getPlant(id)
+      plant = this.props.plantCache.find(p => p._id === id)
     }
     this.setState({ plant })
   }
@@ -34,8 +33,30 @@ class PlantDetails extends React.Component {
   getColorString = () => {
     let colors = ''
     this.state.plant.flowerColors.map(c => colors = `${colors} ${c}`)
-    console.log('Colors: ', colors)
     return colors
+  }
+
+  handleEdit = () => {
+    this.props.history.push(`/plants/edit/${this.state.plant._id}`)
+  }
+
+  handleDelete = async () => {
+    await this.props.deletePlant(this.state.plant._id)
+    if (!this.props.error) {
+      this.props.addUIMessage(
+        `Kasvi ${this.state.plant.name} poistettu!`,
+        'success',
+        10
+      )
+      await this.props.getPlantCount()
+      this.props.history.push('/plants')
+    } else {
+      this.props.addUIMessage(
+        `Kasvia ${this.state.plant.name} ei pystytty poistamaan!`,
+        'danger',
+        10
+      )
+    }
   }
 
   render() {
@@ -43,10 +64,31 @@ class PlantDetails extends React.Component {
       const plant = this.state.plant
       return (
         <div style={{ marginTop: 20 }}>
-          <div>
-            <MalvaPlantHeader text={plant.name} />
-            <MalvaPlantSubHeader text={plant.scientificName} />
-          </div>
+          <MalvaPlantHeader text={plant.name} />
+          <MalvaPlantSubHeader text={plant.scientificName} />
+
+          <Row style={{ paddingLeft: 15, marginBottom: 10 }}>
+            <MalvaLinkButton
+              text='Takaisin'
+              to='/plants'
+              btnType='default'
+            />
+            <MalvaButton
+              name='editbtn'
+              btntype='primary'
+              onClick={this.handleEdit}
+            >
+              Muuta
+            </MalvaButton>
+            <MalvaButton
+              name='editbtn'
+              btntype='danger'
+              onClick={this.handleDelete}
+            >
+              Poista
+            </MalvaButton>
+          </Row>
+
           <Row>
             <Col sm={2}>
               <span>Korkeus: {plant.height} cm</span>
@@ -137,12 +179,16 @@ class PlantDetails extends React.Component {
 }
 
 const mapStateToProps = store => ({
-  plantCache: store.plants.cache
+  plantCache: store.plants.cache,
+  error: store.plants.error
 })
 
 export default withRouter(connect(
   mapStateToProps,
   {
-    getPlant
+    getPlant,
+    deletePlant,
+    getPlantCount,
+    addUIMessage
   }
 )(PlantDetails))

@@ -164,6 +164,7 @@ export const getPlant = (_id) => {
     dispatch(getPlantBegin())
     try {
       const plant = await entityService.getOne('plants', _id)
+      console.log('got plant in actions', plant)
       dispatch(getPlantSuccess(plant))
     } catch (error) {
       console.log(error)

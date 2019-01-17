@@ -86,4 +86,18 @@ plantRouter.post('/', wrapAsync(async (req, res, next) => {
   res.status(201).json(plant)
 }))
 
+plantRouter.delete('/:id', wrapAsync(async (req, res, next) => {
+  checkUser(req)
+
+  let plant = await Plant.findById(req.params.id)
+  if (!plant) {
+    let err = new Error('Plant to be removed does not exist')
+    err.isBadRequest = true
+    throw err
+  }
+
+  await Plant.findByIdAndRemove(plant._id)
+  res.status(204).end()
+}))
+
 module.exports = plantRouter
