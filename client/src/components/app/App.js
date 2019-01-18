@@ -3,18 +3,27 @@ import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import MalvaLayout from '../uiStructure/MalvaLayout'
 
+import CountryList from '../countries/countryList'
 import FrontPage from '../frontpage/FrontPage'
-import PlantsList from '../plants/PlantsList'
+import PlantAdd from '../plants/plantAdd'
+import PlantDetails from '../plants/plantDetails'
+import PlantEdit from '../plants/plantEdit'
+import PlantList from '../plants/plantList'
 import Registration from '../users/Registration'
+import SoilTypeList from '../soilTypes/soilTypeList'
 
 class App extends React.Component {
   render() {
     return (
       <MalvaLayout>
         <Route exact path='/' render={() => <FrontPage />} />
-        <Route exact path='/plants' render={() => <PlantsList />} />
+        <Route exact path='/countries' render={() => <CountryList />} />
+        <Route exact path='/plants' render={() => <PlantList />} />
+        <Route exact path='/plants/add' render={() => <PlantAdd />} />
+        <Route exact path='/plants/details/:id' render={(props) => <PlantDetails {...props} />} />
+        <Route exact path='/plants/edit/:id' render={(props) => <PlantEdit {...props} />} />
         <Route exact path='/register' render={() => <Registration />} />
-        <p>Nothing to see here, disperse!</p>
+        <Route exact path='/soiltypes' render={() => <SoilTypeList />} />
       </MalvaLayout>
     )
   }

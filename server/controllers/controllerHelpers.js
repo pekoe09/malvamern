@@ -41,10 +41,36 @@ const validateEmailForm = (email) => {
   }
 }
 
+const validateNonNegativeFields = (req, fieldNames, entity, operation) => {
+  fieldNames.forEach(f => {
+    const value = req.body[f]
+    if (isNaN(value) || value < 0) {
+      let err = new Error(`The value for ${f} is negative (trying to ${operation} ${entity}).`)
+      err.isBadRequest = true
+      throw err
+    }
+  })
+}
+
+const validateMonthNumbers = (req, fieldNames, entity, operation) => {
+  fieldNames.forEach(f => {
+    const value = req.body[f]
+    if (value !== "") {
+      if (isNaN.value || isNaN(parseInt(value)) || value < 1 || value > 12) {
+        let err = new Error(`The value for ${f} is not an integer between 1 and 12 (trying to ${operation} ${entity})`)
+        err.isBadRequest = true
+        throw err
+      }
+    }
+  })
+}
+
 module.exports = {
   wrapAsync,
   checkUser,
   validateMandatoryField,
   validateMandatoryFields,
+  validateNonNegativeFields,
+  validateMonthNumbers,
   validateEmailForm
 }

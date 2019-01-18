@@ -5,7 +5,6 @@ const userRouter = require('express').Router()
 const User = require('../models/user')
 
 userRouter.post('/register', wrapAsync(async (req, res, next) => {
-  console.log('POST:/register called', req.body)
   const mandatories = ['username', 'email', 'firstNames', 'lastName']
   validateMandatoryFields(req, mandatories, 'User', 'register')
   validateEmailForm(req.body.email)

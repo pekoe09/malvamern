@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom'
 import { Navbar, FormGroup, FormControl, Button } from 'react-bootstrap'
 import { login } from '../../actions/userActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
+import { getAllCountries } from '../../actions/countryActions'
+import { getAllSoilTypes } from '../../actions/soilTypeActions'
 
 class Login extends React.Component {
   constructor(props) {
@@ -28,6 +30,11 @@ class Login extends React.Component {
     await this.props.login(credentials)
     if (this.props.error) {
       await this.props.addUIMessage('Wrong username or password', 'error', 10)
+    } else {
+      console.log('Getting static data')
+      await this.props.getAllCountries()
+      await this.props.getAllSoilTypes()
+      console.log('Static data retrieved')
     }
   }
 
@@ -67,6 +74,8 @@ export default withRouter(connect(
   mapStateToProps,
   {
     login,
-    addUIMessage
+    addUIMessage,
+    getAllCountries,
+    getAllSoilTypes
   }
 )(Login))
