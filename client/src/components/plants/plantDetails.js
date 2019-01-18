@@ -69,7 +69,7 @@ class PlantDetails extends React.Component {
 
           <Row style={{ paddingLeft: 15, marginBottom: 10 }}>
             <MalvaLinkButton
-              text='Takaisin'
+              text='Kasvilistaan'
               to='/plants'
               btnType='default'
             />

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
 import { Col, Row, FormControl, HelpBlock, Checkbox } from 'react-bootstrap'
 import { MalvaForm, MalvaControlLabel, MalvaFormGroup, MalvaButton, MalvaLinkButton } from '../common/MalvaStyledComponents'
 import NumberEntryField from '../common/NumberEntryField'
@@ -72,6 +73,9 @@ class PlantEdit extends React.Component {
       await this.props.getPlant(id)
       plant = this.props.plantCache.find(p => p._id === id)
     }
+    const flowerColors = plant.flowerColors.map(f => {
+      return _.find(colorList, c => c.value === f)
+    })
     this.setState({
       plant: plant,
       _id: plant._id,
@@ -90,7 +94,7 @@ class PlantEdit extends React.Component {
       floweringTo: plant.floweringTo ? plant.floweringTo.number.toString() : '',
       harvestFrom: plant.harvestFrom ? plant.harvestFrom.number.toString() : '',
       harvestTo: plant.harvestTo ? plant.harvestTo.number.toString() : '',
-      flowerColors: plant.flowerColors,
+      flowerColors,
       isPoisonous: plant.isPoisonous,
       hasSpikes: plant.hasSpikes,
       description: plant.description,
@@ -196,6 +200,25 @@ class PlantEdit extends React.Component {
     }
   }
 
+  handleDelete = async () => {
+    await this.props.deletePlant(this.state.plant._id)
+    if (!this.props.error) {
+      this.props.addUIMessage(
+        `Kasvi ${this.state.plant.name} poistettu!`,
+        'success',
+        10
+      )
+      await this.props.getPlantCount()
+      this.props.history.push('/plants')
+    } else {
+      this.props.addUIMessage(
+        `Kasvia ${this.state.plant.name} ei pystytty poistamaan!`,
+        'danger',
+        10
+      )
+    }
+  }
+
   validate = () => {
     return {
       name: !this.state.name && this.state.touched['name'] ? 'Nimi on pakollinen tieto' : '',
@@ -257,7 +280,7 @@ class PlantEdit extends React.Component {
             Tallenna
           </MalvaButton>
           <MalvaLinkButton
-            text='Peruuta'
+            text='Kasvilistaan'
             to='/plants'
             btnType='default'
           />
@@ -266,6 +289,13 @@ class PlantEdit extends React.Component {
             onClick={this.handleClear}
           >
             Tyhjennä
+          </MalvaButton>
+          <MalvaButton
+            name='editbtn'
+            btntype='danger'
+            onClick={this.handleDelete}
+          >
+            Poista
           </MalvaButton>
         </div>
 
@@ -560,6 +590,13 @@ class PlantEdit extends React.Component {
                 onClick={this.handleClear}
               >
                 Tyhjennä
+              </MalvaButton>
+              <MalvaButton
+                name='editbtn'
+                btntype='danger'
+                onClick={this.handleDelete}
+              >
+                Poista
               </MalvaButton>
             </Row>
 
