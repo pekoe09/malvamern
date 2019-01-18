@@ -142,6 +142,7 @@ const plantReducer = (store = initialState, action) => {
       return {
         ...store,
         items: store.items.map(p => p._id === updated._id ? updated : p),
+        cache: store.items.map(p => p._id === updated._id ? updated : p),
         updating: false,
         error: null
       }

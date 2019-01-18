@@ -1,15 +1,15 @@
 const colorList = [
-  { value: 'valkoinen', label: 'valkoinen' },
-  { value: 'punainen', label: 'punainen' },
-  { value: 'vaaleanpunainen', label: 'vaaleanpunainen' },
-  { value: 'oranssi', label: 'oranssi' },
-  { value: 'keltainen', label: 'keltainen' },
-  { value: 'vihreä', label: 'vihreä' },
-  { value: 'sininen', label: 'sininen' },
-  { value: 'vaaleansininen', label: 'vaaleansininen' },
-  { value: 'violetti', label: 'violetti' },
-  { value: 'ruskea', label: 'ruskea' },
-  { value: 'musta', label: 'musta' }
+  { value: 'white', label: 'valkoinen' },
+  { value: 'red', label: 'punainen' },
+  { value: 'pink', label: 'vaaleanpunainen' },
+  { value: 'orange', label: 'oranssi' },
+  { value: 'yellow', label: 'keltainen' },
+  { value: 'green', label: 'vihreä' },
+  { value: 'blue', label: 'sininen' },
+  { value: 'paleblue', label: 'vaaleansininen' },
+  { value: 'violet', label: 'violetti' },
+  { value: 'brown', label: 'ruskea' },
+  { value: 'black', label: 'musta' }
 ]
 
 export default colorList

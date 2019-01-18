@@ -86,6 +86,58 @@ plantRouter.post('/', wrapAsync(async (req, res, next) => {
   res.status(201).json(plant)
 }))
 
+plantRouter.put('/:id', wrapAsync(async (req, res, next) => {
+  checkUser(req)
+  const mandatories = ['name', 'scientificName', 'heightMin', 'widthMin',
+    'description', 'shortDescription']
+  validateMandatoryFields(req, mandatories, 'plant', 'create')
+  const nonNegatives = ['heightMin', 'heightMax', 'widthMin', 'widthMax', 'plantDistance', 'plantDepth']
+  validateNonNegativeFields(req, nonNegatives, 'plant', 'create')
+  const monthData = ['plantingFrom', 'plantingTo', 'floweringFrom', 'floweringTo',
+    'harvestFrom', 'harvestTo']
+  validateMonthNumbers(req, monthData, 'plant', 'create')
+
+  let plant = await Plant.findById(req.params.id)
+  if (!plant) {
+    let err = new Error('Plant to be updated does not exist')
+    err.isBadRequest = true
+    throw err
+  }
+
+  let match = await Plant.findOne({ name: req.body.name })
+  if (match && !match._id.equals(plant._id)) {
+    let err = new Error('Another plant with the same name exists already')
+    err.isBadRequest = true
+    throw err
+  }
+
+  plant.name = req.body.name
+  plant.scientificName = req.body.scientificName
+  plant.heightMin = req.body.heightMin
+  plant.heightMax = req.body.heightMax
+  plant.widthMin = req.body.widthMin
+  plant.widthMax = req.body.widthMax
+  plant.plantDistance = req.body.plantDistance
+  plant.plantDepth = req.body.plantDepth
+  plant.soilTypes = req.body.soilTypes
+  plant.plantingFrom = req.body.plantingFrom ? { number: req.body.plantingFrom } : null
+  plant.plantingTo = req.body.plantingTo ? { number: req.body.plantingTo } : null
+  plant.floweringFrom = req.body.floweringFrom ? { number: req.body.floweringFrom } : null
+  plant.floweringTo = req.body.floweringTo ? { number: req.body.floweringTo } : null
+  plant.harvestFrom = req.body.harvestFrom ? { number: req.body.harvestFrom } : null
+  plant.harvestTo = req.body.harvestTo ? { number: req.body.harvestTo } : null
+  plant.flowerColors = req.body.flowerColors
+  plant.isPoisonous = req.body.isPoisonous
+  plant.hasSpikes = req.body.hasSpikes
+  plant.description = req.body.description
+  plant.shortDescription = req.body.shortDescription
+  plant.environmentRequirements = req.body.environmentRequirements
+  plant.careInstructions = req.body.careInstructions
+
+  plant = await Plant.findByIdAndUpdate(plant._id, plant, { new: true })
+  res.status(201).json(plant)
+}))
+
 plantRouter.delete('/:id', wrapAsync(async (req, res, next) => {
   checkUser(req)
 

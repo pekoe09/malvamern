@@ -39,7 +39,6 @@ class PlantList extends React.Component {
   }
 
   handleDelete = async (_id, name) => {
-    console.log('Deleting ', _id)
     await this.props.deletePlant(_id)
     if (!this.props.error) {
       this.props.addUIMessage(

@@ -34,7 +34,7 @@ const plantListItemBodyStyle = {
   fontFamily: 'sans-serif'
 }
 
-const PlantListItem = ({ plant, handleDelete }) => {
+const PlantListItem = ({ plant, handleDelete, handleEdit }) => {
   return (
     <div style={plantListItemStyle}>
       <Row style={{ height: '100%' }}>
@@ -56,8 +56,14 @@ const PlantListItem = ({ plant, handleDelete }) => {
             </Col>
           </div>
           <div style={plantListItemStatsStyle}>
-            <Col sm={12} style={{ padding: 0 }}>
+            <Col sm={10} style={{ padding: 0 }}>
               <p>Korkeus: {plant.height} cm Leveys: {plant.width} cm</p>
+            </Col>
+            <Col sm={2} style={{ display: 'inline-grid' }}>
+              <MalvaVerticalLinkButton
+                text='Muokkaa'
+                to={`/plants/edit/${plant._id}`}
+              />
             </Col>
           </div>
           <div style={plantListItemBodyStyle}>

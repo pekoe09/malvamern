@@ -65,7 +65,7 @@ soilTypeRouter.put('/:id', wrapAsync(async (req, res, next) => {
   }
   let match = await SoilType.findOne({ name: req.body.name, 'country.name': country.name })
   console.log('Match', match)
-  if (match && match._id !== soilType._id) {
+  if (match && match._id.equals(soilType._id)) {
     let err = new Error('Another soil type for the same country with the same name exists already')
     err.isBadRequest = true
     throw err

@@ -78,7 +78,7 @@ class PlantDetails extends React.Component {
               btntype='primary'
               onClick={this.handleEdit}
             >
-              Muuta
+              Muokkaa
             </MalvaButton>
             <MalvaButton
               name='editbtn'
