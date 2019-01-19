@@ -6,7 +6,7 @@ locationRouter.post('/', wrapAsync(async (req, res, next) => {
   checkUser(req)
   const mandatories = ['name', 'isActive']
   validateMandatoryFields(req, mandatories, 'Location', 'create')
-  const user = await User.findById(req.user._id)
+  let user = await User.findById(req.user._id)
   const match = user.locations.find(l => l.name === req.body.name)
   if (match) {
     let err = new Error('There already exists a location with the same name')
@@ -14,7 +14,7 @@ locationRouter.post('/', wrapAsync(async (req, res, next) => {
     throw err
   }
 
-  const location = {
+  let location = {
     name: req.body.name,
     city: req.body.city,
     country: req.body.country,
@@ -22,7 +22,7 @@ locationRouter.post('/', wrapAsync(async (req, res, next) => {
     isActive: req.body.isActive
   }
   user.locations = user.locations.concat(location)
-  user = await User.findByIdAndUpdate(user._id, user)
+  user = await User.findByIdAndUpdate(user._id, user, { new: true })
   location = user.locations.find(l => l.name === location.name)
   res.status(201).json(location)
 }))
@@ -49,7 +49,7 @@ locationRouter.put('/:id', wrapAsync(async (req, res, next) => {
   }
   user.locations = user.locations.map(l =>
     l._id.equals(location._id) ? location : l)
-  user = await User.findByIdAndUpdate(user._id, user)
+  user = await User.findByIdAndUpdate(user._id, user, { new: true })
   location = user.locations.find(l => l.name === location.name)
   res.status(201).json(location)
 }))
@@ -64,7 +64,7 @@ locationRouter.delete('/:id', wrapAsync(async (req, res, next) => {
     throw err
   }
   user.locations = user.locations.map(l => !l._id.equals(location._id))
-  user = await User.findByIdAndUpdate(user._id, user)
+  user = await User.findByIdAndUpdate(user._id, user, { new: true })
   res.status(204).end()
 }))
 
