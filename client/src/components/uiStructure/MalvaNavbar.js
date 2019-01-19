@@ -47,6 +47,11 @@ const LoggedInVisitorNavs = () => {
           Kasvit
         </NavItem>
       </LinkContainer>
+      <LinkContainer to='/garden'>
+        <NavItem>
+          Puutarha
+        </NavItem>
+      </LinkContainer>
       <LinkContainer to='/calendar'>
         <NavItem>
           Kalenteri
