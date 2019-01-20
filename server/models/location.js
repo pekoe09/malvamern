@@ -11,7 +11,7 @@ const locationSchema = new mongoose.Schema({
   country: {
     type: String
   },
-  soiltypes: [{
+  soilTypes: [{
     _id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true

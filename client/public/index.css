@@ -55,3 +55,10 @@ div#main {
   margin-top: 15px;
   margin-right: 15px;
 }
+
+.nav-pills>li.malva-selected>a, 
+.nav-pills>li.malva-selected>a:focus,
+.nav-pills>li.malva-selected>a:hover {
+  color: darkgreen;
+  background-color: greenyellow;
+}

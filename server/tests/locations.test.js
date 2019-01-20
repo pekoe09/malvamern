@@ -22,7 +22,7 @@ describe('POST /api/locations', () => {
       name: 'newlocation',
       city: 'newcity',
       country: 'newcountry',
-      soiltypes: [],
+      soilTypes: [],
       isActive: true
     }
 
@@ -42,12 +42,12 @@ describe('POST /api/locations', () => {
     expect(newLocation.name).to.equal(location.name)
     expect(newLocation.city).to.equal(location.city)
     expect(newLocation.country).to.equal(location.country)
-    expect(newLocation.soiltypes.length).to.equal(location.soiltypes.length)
+    expect(newLocation.soilTypes.length).to.equal(location.soilTypes.length)
     expect(newLocation.isActive).to.equal(location.isActive)
     expect(newLocationInDb.name).to.equal(location.name)
     expect(newLocationInDb.city).to.equal(location.city)
     expect(newLocationInDb.country).to.equal(location.country)
-    expect(newLocationInDb.soiltypes.length).to.equal(location.soiltypes.length)
+    expect(newLocationInDb.soilTypes.length).to.equal(location.soilTypes.length)
     expect(newLocationInDb.isActive).to.equal(location.isActive)
   })
 

@@ -127,7 +127,7 @@ class LocationAdd extends React.Component {
               <FormControl
                 type='text'
                 name='country'
-                value={this.state.name}
+                value={this.state.country}
                 onChange={this.handleChange}
                 onBlur={this.handleBlur('country')}
               />
@@ -167,7 +167,7 @@ class LocationAdd extends React.Component {
           </MalvaButton>
           <MalvaButton
             name='cancelbtn'
-            btnType='default'
+            btntype='default'
             onClick={this.handleCloseModal}
           >
             Peruuta
@@ -181,6 +181,7 @@ class LocationAdd extends React.Component {
 const mapStateToProps = store => ({
   soilTypes: store.soilTypes.items.map(s => (
     {
+      ...s,
       value: s._id,
       label: s.name
     }
