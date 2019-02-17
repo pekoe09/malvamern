@@ -10,7 +10,8 @@ const initialUsers = [
     lastName: 'User1',
     password: 'test1',
     passwordHash: '$2a$10$UdYL7yoi/Fgify8nxuPuTecoT/DKB0XZJwYHTxK0vLrZOgoajFVbq',
-    email: 'test1@test.com'
+    email: 'test1@test.com',
+    locations: []
   },
   {
     username: 'testuser2',
@@ -18,7 +19,16 @@ const initialUsers = [
     lastName: 'User2',
     password: 'test2',
     passwordHash: '$2a$10$8jJZY1inPKBS28JnNp3ix.f5wBKqPB711ag1P7ktJvaygBTtIVgUO',
-    email: 'test3@test.com'
+    email: 'test3@test.com',
+    locations: [
+      {
+        name: 'testlocation1',
+        city: 'Alajärvi',
+        country: 'Finland',
+        soilTypes: [],
+        isActive: true
+      }
+    ]
   },
   {
     username: 'testuser3',
@@ -26,7 +36,30 @@ const initialUsers = [
     lastName: 'User3',
     password: 'test3',
     passwordHash: '$2a$10$jhhWHC4rpH7rl//F8aYRVuZD8w200ePLE54q39GQ7Yzc9jtbCKnaq',
-    email: 'test3@test.com'
+    email: 'test3@test.com',
+    locations: [
+      {
+        name: 'testlocation2',
+        city: 'Seinäjoki',
+        country: 'Finland',
+        soilTypes: [],
+        isActive: true
+      },
+      {
+        name: 'testlocation3',
+        city: 'Tampere',
+        country: 'Finland',
+        soilTypes: [],
+        isActive: false
+      },
+      {
+        name: 'testlocation3',
+        city: 'Kuortane',
+        country: 'Finland',
+        soilTypes: [],
+        isActive: true
+      },
+    ]
   }
 ]
 
@@ -38,7 +71,8 @@ const usersInDb = async () => {
       username: 1,
       lastName: 1,
       firstNames: 1,
-      email: 1
+      email: 1,
+      locations: 1
     })
 }
 

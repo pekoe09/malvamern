@@ -9,6 +9,17 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE
 } from '../actions/userActions'
+import {
+  LOCATION_CREATE_BEGIN,
+  LOCATION_CREATE_SUCCESS,
+  LOCATION_CREATE_FAILURE,
+  LOCATION_UPDATE_BEGIN,
+  LOCATION_UPDATE_SUCCESS,
+  LOCATION_UDPATE_FAILURE,
+  LOCATION_DELETE_BEGIN,
+  LOCATION_DELETE_SUCCESS,
+  LOCATION_DELETE_FAILURE
+} from '../actions/locationActions'
 
 const initialState = {
   items: [],
@@ -16,6 +27,9 @@ const initialState = {
   registering: false,
   loggingIn: false,
   loggingOut: false,
+  creatingLocation: false,
+  updatingLocation: false,
+  deletingLocation: false,
   error: null
 }
 
@@ -83,6 +97,77 @@ const userReducer = (store = initialState, action) => {
         ...store,
         loggingOut: false,
         loggingIn: false,
+        error: action.payload.error
+      }
+    case LOCATION_CREATE_BEGIN:
+      return {
+        ...store,
+        creatingLocation: true,
+        error: null
+      }
+    case LOCATION_CREATE_SUCCESS:
+      return {
+        ...store,
+        creatingLocation: false,
+        error: null,
+        currentUser: {
+          ...store.currentUser,
+          locations: store.currentUser.locations.concat(action.payload.location)
+        }
+      }
+    case LOCATION_CREATE_FAILURE:
+      return {
+        ...store,
+        creatingLocation: false,
+        error: action.payload.error
+      }
+    case LOCATION_UPDATE_BEGIN:
+      return {
+        ...store,
+        updatingLocation: true,
+        error: null
+      }
+    case LOCATION_UPDATE_SUCCESS: {
+      const location = action.payload.location
+      return {
+        ...store,
+        updatingLocation: false,
+        error: null,
+        currentUser: {
+          ...store.currentUser,
+          locations: store.currentUser.locations.map(l =>
+            l._id.toString() === location._id.toString() ? location : l)
+        }
+      }
+    }
+    case LOCATION_UDPATE_FAILURE:
+      return {
+        ...store,
+        updatingLocation: false,
+        error: action.payload.error
+      }
+    case LOCATION_DELETE_BEGIN:
+      return {
+        ...store,
+        deletingLocation: true,
+        error: null
+      }
+    case LOCATION_DELETE_SUCCESS: {
+      const location = action.payload.location
+      return {
+        ...store,
+        deletingLocation: false,
+        error: null,
+        currentUser: {
+          ...store.currentUser,
+          locations: store.currentUser.filter(l => l._id.toString() !== location._id.toString())
+        }
+      }
+    }
+    case LOCATION_DELETE_FAILURE:
+      return {
+        ...store,
+        deletingLocation: false,
         error: action.payload.error
       }
     default:

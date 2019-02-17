@@ -118,7 +118,6 @@ class SoilTypeAdd extends React.Component {
               />
             </FormGroup>
           </MalvaForm>
-
         </Modal.Body>
         <Modal.Footer>
           <Button

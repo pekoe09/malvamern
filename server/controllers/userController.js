@@ -24,7 +24,8 @@ userRouter.post('/register', wrapAsync(async (req, res, next) => {
     passwordHash,
     firstNames: body.firstNames,
     lastName: body.lastName,
-    email: body.email
+    email: body.email,
+    locations: []
   })
 
   user = await user.save()
@@ -41,7 +42,8 @@ userRouter.post('/login', wrapAsync(async (req, res, next) => {
       passwordHash: 1,
       lastName: 1,
       firstNames: 1,
-      email: 1
+      email: 1,
+      locations: 1
     })
 
   const isCorrectPsw = user === null ? false : await bcrypt.compare(body.password, user.passwordHash)
@@ -63,6 +65,7 @@ userRouter.post('/login', wrapAsync(async (req, res, next) => {
     lastName: user.lastName,
     firstNames: user.firstNames,
     email: user.email,
+    locations: user.locations,
     token
   })
 }))

@@ -36,7 +36,7 @@ const plantSchema = new mongoose.Schema({
     type: Number,
     min: 0
   },
-  soiltypes: [{
+  soilTypes: [{
     _id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true
