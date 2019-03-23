@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 
 import countryReducer from './reducers/countryReducer'
+import imageReducer from './reducers/imageReducer'
 import plantReducer from './reducers/plantReducer'
 import soilTypeReducer from './reducers/soilTypeReducer'
 import uiMessageReducer from './reducers/uiMessageReducer'
@@ -12,6 +13,7 @@ import userReducer from './reducers/userReducer'
 
 const appReducer = combineReducers({
   countries: countryReducer,
+  images: imageReducer,
   plants: plantReducer,
   soilTypes: soilTypeReducer,
   uiMessages: uiMessageReducer,

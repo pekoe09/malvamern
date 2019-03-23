@@ -4,13 +4,20 @@ if (process.env.NODE_ENV !== 'production') {
 
 let port = process.env.PORT
 let mongoConnStr = process.env.MONGO_CONN_STR
+let awsAccessKey = process.env.AWS_ACCESS_KEY
+let awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+let s3Bucket = process.env.S3_BUCKET
 
 if(process.env.NODE_ENV === 'test') {
   port = process.env.TEST_PORT
   mongoConnStr = process.env.TEST_MONGO_CONN_STR
+  s3Bucket = process.env.S3_TEST_BUCKET
 }
 
 module.exports = {
   port,
-  mongoConnStr
+  mongoConnStr,
+  awsAccessKey,
+  awsSecretAccessKey,
+  s3Bucket
 }

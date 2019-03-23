@@ -4,10 +4,12 @@ import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { Col, Row, FormControl, HelpBlock, Checkbox } from 'react-bootstrap'
 import { MalvaForm, MalvaControlLabel, MalvaFormGroup, MalvaButton, MalvaLinkButton } from '../common/MalvaStyledComponents'
+import { MalvaImageContainer } from '../common/MalvaElements'
 import NumberEntryField from '../common/NumberEntryField'
 import ViewHeader from '../common/ViewHeader'
 import colorList from './colorList'
 import Select from 'react-select'
+import ImageAdd from './imageAdd'
 import { getPlant, updatePlant } from '../../actions/plantActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
@@ -39,6 +41,8 @@ class PlantEdit extends React.Component {
       shortDescription: '',
       environmentRequirements: '',
       careInstructions: '',
+      openImageAddModal: false,
+      modalError: '',
       touched: {
         name: false,
         scientificName: false,
@@ -217,6 +221,21 @@ class PlantEdit extends React.Component {
         10
       )
     }
+  }
+
+  toggleImageAddOpen = () => {
+    this.setState({
+      openImageAddModal: !this.state.openImageAddModal,
+      modalError: ''
+    })
+  }
+
+  handleAddImage = async () => {
+    this.toggleImageAddOpen()
+  }
+
+  handleSaveImage = async (image) => {
+    console.log('Saving image', image.name)
   }
 
   validate = () => {
@@ -571,6 +590,26 @@ class PlantEdit extends React.Component {
               <HelpBlock>{errors['careInstructions']}</HelpBlock>
             </MalvaFormGroup>
 
+            <MalvaFormGroup>
+              <MalvaControlLabel>Kuvat</MalvaControlLabel>
+              <Row
+                style={{
+                  paddingLeft: 15,
+                  paddingBottom: 10
+                }}>
+                <MalvaButton
+                  name='addImageBtn'
+                  btntype='warning'
+                  onClick={this.handleAddImage}
+                >
+                  Lisää kuva
+                </MalvaButton>
+              </Row>
+              <MalvaImageContainer>
+                <div>Kuvat</div>
+              </MalvaImageContainer>
+            </MalvaFormGroup>
+
             <Row style={{ paddingLeft: 15 }}>
               <MalvaButton
                 name='savebtn'
@@ -602,6 +641,13 @@ class PlantEdit extends React.Component {
 
           </MalvaForm>
         </Col>
+
+        <ImageAdd
+          modalIsOpen={this.state.openImageAddModal}
+          closeModal={this.toggleImageAddOpen}
+          handleSave={this.handleSaveImage}
+          modalError={this.state.modalError}
+        />
       </div>
     )
   }

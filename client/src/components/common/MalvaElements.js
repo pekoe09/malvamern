@@ -64,10 +64,27 @@ const MalvaPlantFieldHeader = ({ text }) => {
   )
 }
 
+const MalvaImageContainer = ({ children }) => {
+  return (
+    <div
+      style={{
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        borderRadius: 3,
+        padding: 10
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
 export {
   MalvaViewHeader,
   MalvaPlantHeader,
   MalvaPlantSubHeader,
   MalvaPlantSectionHeader,
-  MalvaPlantFieldHeader
+  MalvaPlantFieldHeader,
+  MalvaImageContainer
 }

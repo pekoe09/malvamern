@@ -19,8 +19,11 @@ import {
   PLANT_UDPATE_FAILURE,
   PLANT_DELETE_BEGIN,
   PLANT_DELETE_SUCCESS,
-  PLANT_DELETE_FAILURE
+  PLANT_DELETE_FAILURE,
 } from '../actions/plantActions'
+import {
+  IMAGE_CREATE_SUCCESS
+} from '../actions/imageActions'
 
 const initialState = {
   items: [],
@@ -142,7 +145,7 @@ const plantReducer = (store = initialState, action) => {
       return {
         ...store,
         items: store.items.map(p => p._id === updated._id ? updated : p),
-        cache: store.items.map(p => p._id === updated._id ? updated : p),
+        cache: store.cache.map(p => p._id === updated._id ? updated : p),
         updating: false,
         error: null
       }
@@ -170,6 +173,27 @@ const plantReducer = (store = initialState, action) => {
         ...store,
         deleting: false,
         error: action.payload.error
+      }
+    case IMAGE_CREATE_SUCCESS:
+      const image = action.payload.image
+      if (image.entity === 'plant') {
+        return {
+          ...store,
+          items: store.items.map(p => p._id === image.entityId ?
+            {
+              ...p,
+              images: p.images ? p.images.concat(image) : [image]
+            }
+            : p),
+          cache: store.cache.map(p => p._id === image.entityId ?
+            {
+              ...p,
+              images: p.images ? p.images.concat(image) : [image]
+            }
+            : p)
+        }
+      } else {
+        return store
       }
     default:
       return store

@@ -58,12 +58,12 @@ const MalvaButton = styled(Button)`
       color: black;  
     `}
 
-      ${props => props.btntype === 'danger' && css`
-        background: white;
-        color: indianred;
-        border-style: solid;
-        border-color: indianred;
-        border-width: 1.5px;
+    ${props => props.btntype === 'danger' && css`
+      background: white;
+      color: indianred;
+      border-style: solid;
+      border-color: indianred;
+      border-width: 1.5px;
         
       &:hover, &:focus {
         background: pink;
@@ -79,14 +79,14 @@ const MalvaButton = styled(Button)`
       }
     `}
   
-      ${props => props.btntype === 'rowdanger' && css`
-        background: white;
-        color: indianred;
-        border-style: solid;
-        border-color: indianred;
-        border-width: 1.5px;
-        font-size: 0.8em;
-        font-weight: 700;
+    ${props => props.btntype === 'rowdanger' && css`
+      background: white;
+      color: indianred;
+      border-style: solid;
+      border-color: indianred;
+      border-width: 1.5px;
+      font-size: 0.8em;
+      font-weight: 700;
         
       &:hover, &:focus {
         background: white;
@@ -98,6 +98,27 @@ const MalvaButton = styled(Button)`
         background: pink;
         color: indianred;
         border-color: indianred;
+        outline: none;
+      }
+    `}
+
+    ${props => props.btntype === 'warning' && css`
+      background: darkorange;
+      color: black;
+      border-style: solid;
+      border-color: darkorange;
+      border-width: 1.5px;
+        
+      &:hover, &:focus {
+        background: orange;
+        color: black;
+        border-color: orange;
+        outline: none;
+      }
+      &:active:focus {
+        background: orange;
+        color: black;
+        border-color: orange;
         outline: none;
       }
     `}
