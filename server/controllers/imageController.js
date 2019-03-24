@@ -12,8 +12,15 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
   const path = req.file.path
   console.log(path)
   console.log(uploadImage)
-  const savedImage = await uploadImage(path)
-
+  let savedImage = null
+  try {
+    savedImage = await uploadImage(path)
+  } catch (error) {
+    console.log(error)
+    let err = new Error('Could not save the image in storage!')
+    err.isUnauthorizedAttempt = true
+    throw err
+  }
   res.status(201).json({ result: savedImage })
 }))
 

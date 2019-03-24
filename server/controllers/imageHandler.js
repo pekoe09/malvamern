@@ -15,12 +15,15 @@ const s3 = new AWS.S3()
 
 const uploadFile = (buffer, name, type) => {
   const params = {
-    ACL: 'public-read',
     Body: buffer,
     Bucket: config.s3Bucket,
     ContentType: type.mime,
     Key: `${name}.${type.ext}`
   }
+  console.log('before aws call')
+  console.log(config.awsAccessKey)
+  console.log(config.awsSecretAccessKey)
+  console.log(params.Bucket)
   return s3.upload(params).promise()
 }
 
