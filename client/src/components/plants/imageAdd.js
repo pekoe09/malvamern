@@ -10,7 +10,7 @@ class ImageAdd extends React.Component {
     this.state = {
       name: '',
       ordinality: 0,
-      file: '',
+      image: null,
       touched: {
         name: false,
         ordinality: false
@@ -20,6 +20,13 @@ class ImageAdd extends React.Component {
 
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleFileChange = (event) => {
+    console.log(event.target.files)
+    this.setState({
+      image: event.target.files[0],
+    })
   }
 
   handleBlur = (field) => () => {
@@ -33,10 +40,11 @@ class ImageAdd extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault()
+    console.log(this.state.image)
     const image = {
       name: this.state.name,
       ordinality: this.state.ordinality,
-
+      file: this.state.image
     }
     await this.props.handleSave(image)
   }
@@ -49,7 +57,7 @@ class ImageAdd extends React.Component {
     this.setState({
       name: '',
       ordinality: 0,
-      file: '',
+      image: null,
       touched: {
         name: false,
         ordinality: false
@@ -109,14 +117,12 @@ class ImageAdd extends React.Component {
                 onBlur={this.handleBlur('ordinality')}
               />
             </MalvaFormGroup>
-            <MalvaFormGroup validationState={this.getValidationState(errors, 'file')}>
-              <MalvaControlLabel>Nimi</MalvaControlLabel>
+            <MalvaFormGroup validationState={this.getValidationState(errors, 'image')}>
+              <MalvaControlLabel>Tiedosto</MalvaControlLabel>
               <FormControl
                 type='file'
-                name='file'
-                value={this.state.file}
-                onChange={this.handleChange}
-                onBlur={this.handleBlur('ordinality')}
+                name='image'
+                onChange={this.handleFileChange}
               />
             </MalvaFormGroup>
           </MalvaForm>

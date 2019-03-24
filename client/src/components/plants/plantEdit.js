@@ -11,6 +11,7 @@ import colorList from './colorList'
 import Select from 'react-select'
 import ImageAdd from './imageAdd'
 import { getPlant, updatePlant } from '../../actions/plantActions'
+import { addImage } from '../../actions/imageActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantEdit extends React.Component {
@@ -236,6 +237,20 @@ class PlantEdit extends React.Component {
 
   handleSaveImage = async (image) => {
     console.log('Saving image', image.name)
+    await this.props.addImage(image)
+    if (!this.props.imageError) {
+      this.props.addUIMessage(
+        `Kuva ${image.name} lisätty kasviin!`,
+        'success',
+        10
+      )
+    } else {
+      this.props.addUIMessage(
+        `Kuvaa ${image.name} ei pystytty lisäämään!`,
+        'danger',
+        10
+      )
+    }
   }
 
   validate = () => {
@@ -657,7 +672,9 @@ const mapStateToProps = store => ({
   plantCache: store.plants.cache,
   soilTypes: store.soilTypes.items,
   updating: store.plants.updating,
-  error: store.plants.error
+  error: store.plants.error,
+  imageUpdating: store.images.updating,
+  imageError: store.images.error
 })
 
 export default withRouter(connect(
@@ -665,6 +682,7 @@ export default withRouter(connect(
   {
     getPlant,
     updatePlant,
+    addImage,
     addUIMessage
   }
 )(PlantEdit))

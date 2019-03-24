@@ -25,8 +25,12 @@ const uploadFile = (buffer, name, type) => {
 }
 
 const uploadImage = async (path) => {
-  const buffer = await fs.readFile(path)
+  console.log('in handler!')
+  console.log(fs.readFile)
+  const buffer = fs.readFileSync(path)
+  console.log('buffer', buffer)
   const type = fileType(buffer)
+  console.log('file type', type)
   const timestamp = Date.now().toString()
   const name = `${timestamp}-lg`
   const result = await uploadFile(buffer, name, type)
