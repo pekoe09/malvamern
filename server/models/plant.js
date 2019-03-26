@@ -84,7 +84,20 @@ const plantSchema = new mongoose.Schema({
   },
   careInstructions: {
     type: String
-  }
+  },
+  images: [{
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true
+    },
+    isThumbnail: {
+      type: Boolean
+    },
+    awskey: {
+      type: String,
+      required: true
+    }
+  }]
 })
 
 plantSchema.virtual('height').get(function () {
@@ -96,7 +109,7 @@ plantSchema.virtual('width').get(function () {
 })
 
 plantSchema.virtual('planting').get(function () {
-  if(this.plantingFrom && this.plantingTo) {
+  if (this.plantingFrom && this.plantingTo) {
     return `${this.plantingFrom.number} - ${this.plantingTo.number}`
   } else if (this.plantingFrom) {
     return this.plantingFrom
@@ -108,7 +121,7 @@ plantSchema.virtual('planting').get(function () {
 })
 
 plantSchema.virtual('flowering').get(function () {
-  if(this.floweringFrom && this.floweringTo) {
+  if (this.floweringFrom && this.floweringTo) {
     return `${this.floweringFrom.number} - ${this.floweringTo.number}`
   } else if (this.floweringFrom) {
     return this.floweringFrom
@@ -120,7 +133,7 @@ plantSchema.virtual('flowering').get(function () {
 })
 
 plantSchema.virtual('harvest').get(function () {
-  if(this.harvestFrom && this.harvestTo) {
+  if (this.harvestFrom && this.harvestTo) {
     return `${this.harvestFrom.number} - ${this.harvestTo.number}`
   } else if (this.harvestFrom) {
     return this.harvestFrom

@@ -2,16 +2,38 @@ const { wrapAsync, checkUser, validateMandatoryFields } = require('./controllerH
 const imageRouter = require('express').Router()
 const multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
-const { uploadImage } = require('./imageHandler')
+const Image = require('../models/image')
+const { uploadImage, downloadImage } = require('./imageHandler')
+
+imageRouter.get('/:id'), wrapAsync(async (req, res, next) => {
+  const image = await Image.findById(req.params.id)
+  if (!image) {
+    let err = new Error('Image not found!')
+    err.isBadRequest = true
+    throw err
+  }
+
+  const imgStream = null
+  try {
+    imgStream = downloadImage(image.awsKey)
+  } catch (error) {
+    let err = new Error('Image unavailable!')
+    err.isUnauthorizedAttempt = true
+    throw err
+  }
+
+  imgStream.pipe(res)
+})
+
+imageRouter.get('/details/:id'), wrapAsync(async (req, res, next) => {
+
+})
 
 imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, next) => {
   checkUser(req)
 
-  console.log(req.body)
-  console.log(req.file)
   const path = req.file.path
-  console.log(path)
-  console.log(uploadImage)
+
   let savedImage = null
   try {
     savedImage = await uploadImage(path)
@@ -21,6 +43,19 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     err.isUnauthorizedAttempt = true
     throw err
   }
+
+  console.log('saved image file', savedImage)
+
+  let image = new Image({
+    name: req.body.name,
+    ordinality: req.body.ordinality,
+    caption: '',
+    awsKey: savedImage.Key,
+    isThumbnail: false
+  })
+  image = await image.save()
+  console.log('saved image record', image)
+
   res.status(201).json({ result: savedImage })
 }))
 

@@ -20,26 +20,36 @@ const uploadFile = (buffer, name, type) => {
     ContentType: type.mime,
     Key: `${name}.${type.ext}`
   }
-  console.log('before aws call')
-  console.log(config.awsAccessKey)
-  console.log(config.awsSecretAccessKey)
-  console.log(params.Bucket)
   return s3.upload(params).promise()
 }
 
+// const downloadFile = (key) => {
+//   const params = {
+//     Bucket: config.s3Bucket,
+//     Key: key
+//   }
+//   return s3.getObject(params).promise()
+// }
+
 const uploadImage = async (path) => {
-  console.log('in handler!')
-  console.log(fs.readFile)
   const buffer = fs.readFileSync(path)
-  console.log('buffer', buffer)
   const type = fileType(buffer)
-  console.log('file type', type)
   const timestamp = Date.now().toString()
   const name = `${timestamp}-lg`
   const result = await uploadFile(buffer, name, type)
   return result
 }
 
+const downloadImage = async (key) => {
+  const params = {
+    Bucket: config.s3Bucket,
+    Key: key
+  }
+  var imgStream = s3.getObject(params).createReadStream()
+  return imgStream
+}
+
 module.exports = {
-  uploadImage
+  uploadImage,
+  downloadImage
 }
