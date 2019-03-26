@@ -13,6 +13,7 @@ const addImage = async (image) => {
   formData.append('file', image.file)
   formData.append('name', image.name)
   formData.append('ordinality', image.ordinality)
+  formData.append('plantId', image.plantId)
   for(var key of formData.entries()){
     console.log(key[0] + ': ' + key[1])
   }

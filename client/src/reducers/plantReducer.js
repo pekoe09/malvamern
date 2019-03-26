@@ -176,16 +176,16 @@ const plantReducer = (store = initialState, action) => {
       }
     case IMAGE_CREATE_SUCCESS:
       const image = action.payload.image
-      if (image.entity === 'plant') {
+      if (image.plantId) {
         return {
           ...store,
-          items: store.items.map(p => p._id === image.entityId ?
+          items: store.items.map(p => p._id === image.plantId ?
             {
               ...p,
               images: p.images ? p.images.concat(image) : [image]
             }
             : p),
-          cache: store.cache.map(p => p._id === image.entityId ?
+          cache: store.cache.map(p => p._id === image.plantId ?
             {
               ...p,
               images: p.images ? p.images.concat(image) : [image]

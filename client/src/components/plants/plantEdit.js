@@ -236,7 +236,6 @@ class PlantEdit extends React.Component {
   }
 
   handleSaveImage = async (image) => {
-    console.log('Saving image', image.name)
     image.plantId = this.state._id
     await this.props.addImage(image)
     if (!this.props.imageError) {

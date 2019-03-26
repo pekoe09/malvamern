@@ -51,8 +51,6 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     throw err
   }
 
-  console.log('saved image file', savedImage)
-
   let image = new Image({
     name: req.body.name,
     ordinality: req.body.ordinality,
@@ -73,7 +71,7 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     let plant = await Plant.findById(req.body.plantId)
     plant = {
       ...plant,
-      images: images ? [imageRef] : plant.images.concat(imageRef)
+      images: plant.images ? plant.images.concat(imageRef) : [imageRef]
     }
   }
 

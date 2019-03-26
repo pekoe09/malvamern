@@ -22,7 +22,6 @@ export const addImage = (image) => {
   return async (dispatch) => {
     dispatch(addImageBegin())
     try {
-      console.log('In action', image)
       image = await imageService.addImage(image)
       dispatch(addImageSuccess(image))
     } catch (error) {
