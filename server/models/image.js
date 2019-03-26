@@ -26,6 +26,9 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  plantId: {
+    type: mongoose.Schema.Types.ObjectId
+  },
   isThumbnail: {
     type: Boolean
   },

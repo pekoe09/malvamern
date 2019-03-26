@@ -237,19 +237,21 @@ class PlantEdit extends React.Component {
 
   handleSaveImage = async (image) => {
     console.log('Saving image', image.name)
+    image.plantId = this.state._id
     await this.props.addImage(image)
     if (!this.props.imageError) {
+      this.setState({
+        openImageAddModal: false
+      })
       this.props.addUIMessage(
         `Kuva ${image.name} lisätty kasviin!`,
         'success',
         10
       )
     } else {
-      this.props.addUIMessage(
-        `Kuvaa ${image.name} ei pystytty lisäämään!`,
-        'danger',
-        10
-      )
+      this.setState({
+        modalError: `Kuvaa ${image.name} ei pystytty lisäämään!`
+      })
     }
   }
 

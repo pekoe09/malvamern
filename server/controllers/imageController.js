@@ -3,6 +3,7 @@ const imageRouter = require('express').Router()
 const multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 const Image = require('../models/image')
+const Plant = require('../models/plant')
 const { uploadImage, downloadImage } = require('./imageHandler')
 
 imageRouter.get('/:id'), wrapAsync(async (req, res, next) => {
@@ -26,7 +27,13 @@ imageRouter.get('/:id'), wrapAsync(async (req, res, next) => {
 })
 
 imageRouter.get('/details/:id'), wrapAsync(async (req, res, next) => {
-
+  const image = await Image.findById(req.params.id)
+  if (!image) {
+    let err = new Error('Image not found!')
+    err.isBadRequest = true
+    throw err
+  }
+  res.json(image)
 })
 
 imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, next) => {
@@ -51,12 +58,26 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     ordinality: req.body.ordinality,
     caption: '',
     awsKey: savedImage.Key,
+    plantId: req.body.plantId,
     isThumbnail: false
   })
   image = await image.save()
   console.log('saved image record', image)
 
-  res.status(201).json({ result: savedImage })
+  if (req.body.plantId) {
+    const imageRef = {
+      _id: image._id,
+      isThumbnail: image.isThumbnail,
+      awsKey: image.awsKey
+    }
+    let plant = await Plant.findById(req.body.plantId)
+    plant = {
+      ...plant,
+      images: images ? [imageRef] : plant.images.concat(imageRef)
+    }
+  }
+
+  res.status(201).json(image)
 }))
 
 module.exports = imageRouter
