@@ -3,6 +3,9 @@ import imageService from '../services/imageServices'
 export const IMAGE_CREATE_BEGIN = 'IMAGE_CREATE_BEGIN'
 export const IMAGE_CREATE_SUCCESS = 'IMAGE_CREATE_SUCCESS'
 export const IMAGE_CREATE_FAILURE = 'IMAGE_CREATE_FAILURE'
+export const IMAGE_GET_BEGIN = 'IMAGE_GET_BEGIN'
+export const IMAGE_GET_SUCCESS = 'IMAGE_GET_SUCCESS'
+export const IMAGE_GET_FAILURE = 'IMAGE_GET_FAILURE'
 
 const addImageBegin = () => ({
   type: IMAGE_CREATE_BEGIN
@@ -18,6 +21,20 @@ const addImageFailure = error => ({
   payload: { error }
 })
 
+const getImageBegin = () => ({
+  type: IMAGE_GET_BEGIN
+})
+
+const getImageSuccess = image => ({
+  type: IMAGE_GET_SUCCESS,
+  payload: { image }
+})
+
+const getImageFailure = error => ({
+  type: IMAGE_GET_FAILURE,
+  payload: { error }
+})
+
 export const addImage = (image) => {
   return async (dispatch) => {
     dispatch(addImageBegin())
@@ -27,6 +44,19 @@ export const addImage = (image) => {
     } catch (error) {
       console.log(error)
       dispatch(addImageFailure(error))
+    }
+  }
+}
+
+export const getImage = id => {
+  return async (dispatch) => {
+    dispatch(getImageBegin())
+    try {
+      const image = await imageService.getImage(id)
+      dispatch(getImageSuccess(image))
+    } catch (error) {
+      console.log(error)
+      dispatch(getImageFailure(error))
     }
   }
 }

@@ -36,6 +36,7 @@ app.use('/api/users', userRouter)
 app.use(express.static(path.resolve(__dirname, '../client/build')))
 
 app.get('*', (req, res) => {
+  console.log('unspecified request', req.url)
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
 })
 

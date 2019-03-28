@@ -6,35 +6,39 @@ const Image = require('../models/image')
 const Plant = require('../models/plant')
 const { uploadImage, downloadImage } = require('./imageHandler')
 
-imageRouter.get('/:id'), wrapAsync(async (req, res, next) => {
+imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
+  console.log('image file get hit')
   const image = await Image.findById(req.params.id)
   if (!image) {
     let err = new Error('Image not found!')
     err.isBadRequest = true
     throw err
   }
-
-  const imgStream = null
+  console.log('found image record', image)
+  let result = null
   try {
-    imgStream = downloadImage(image.awsKey)
+    result = await downloadImage(image.awsKey)
   } catch (error) {
+    console.log(error)
     let err = new Error('Image unavailable!')
     err.isUnauthorizedAttempt = true
     throw err
   }
+  console.log(result)
+  res.json(result)
+}))
 
-  imgStream.pipe(res)
-})
-
-imageRouter.get('/details/:id'), wrapAsync(async (req, res, next) => {
+imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
+  console.log('image details hit')
   const image = await Image.findById(req.params.id)
   if (!image) {
     let err = new Error('Image not found!')
     err.isBadRequest = true
     throw err
   }
+  console.log(image)
   res.json(image)
-})
+}))
 
 imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, next) => {
   checkUser(req)
@@ -74,6 +78,7 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
       images: plant.images ? plant.images.concat(imageRef) : [imageRef]
     }
   }
+
 
   res.status(201).json(image)
 }))

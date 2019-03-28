@@ -10,6 +10,7 @@ import ViewHeader from '../common/ViewHeader'
 import colorList from './colorList'
 import Select from 'react-select'
 import ImageAdd from './imageAdd'
+import ImageItem from './ImageItem'
 import { getPlant, updatePlant } from '../../actions/plantActions'
 import { addImage } from '../../actions/imageActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
@@ -42,6 +43,7 @@ class PlantEdit extends React.Component {
       shortDescription: '',
       environmentRequirements: '',
       careInstructions: '',
+      images: [],
       openImageAddModal: false,
       modalError: '',
       touched: {
@@ -72,6 +74,7 @@ class PlantEdit extends React.Component {
   }
 
   componentDidMount = async () => {
+    console.log('plantedit mounted!')
     const id = this.props.match.params.id
     let plant = this.props.plantCache.find(p => p._id === id)
     if (!plant) {
@@ -81,6 +84,7 @@ class PlantEdit extends React.Component {
     const flowerColors = plant.flowerColors.map(f => {
       return _.find(colorList, c => c.value === f)
     })
+    console.log(plant.images)
     this.setState({
       plant: plant,
       _id: plant._id,
@@ -105,7 +109,8 @@ class PlantEdit extends React.Component {
       description: plant.description,
       shortDescription: plant.shortDescription,
       environmentRequirements: plant.environmentRequirements,
-      careInstructions: plant.careInstructions
+      careInstructions: plant.careInstructions,
+      images: plant.images
     })
   }
 
@@ -154,6 +159,7 @@ class PlantEdit extends React.Component {
       shortDescription: '',
       environmentRequirements: '',
       careInstructions: '',
+      images: [],
       touched: {
         name: false,
         scientificName: false,
@@ -251,6 +257,16 @@ class PlantEdit extends React.Component {
       this.setState({
         modalError: `Kuvaa ${image.name} ei pystytty lisäämään!`
       })
+    }
+  }
+
+  mapImages = () => {
+    if (this.state.images.length > 0) {
+      return this.state.images.map(i =>
+        <ImageItem key={i._id} imageDetails={i} />
+      )
+    } else {
+      return <div>Kuvia ei vielä ole...</div>
     }
   }
 
@@ -622,7 +638,9 @@ class PlantEdit extends React.Component {
                 </MalvaButton>
               </Row>
               <MalvaImageContainer>
-                <div>Kuvat</div>
+                <div>
+                  {this.mapImages()}
+                </div>
               </MalvaImageContainer>
             </MalvaFormGroup>
 

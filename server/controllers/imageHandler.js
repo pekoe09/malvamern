@@ -40,13 +40,15 @@ const uploadImage = async (path) => {
   return result
 }
 
-const downloadImage = async (key) => {
+const downloadImage = async (key) => {  
   const params = {
     Bucket: config.s3Bucket,
     Key: key
   }
-  var imgStream = s3.getObject(params).createReadStream()
-  return imgStream
+  console.log('getting with params', params)
+  const result = await s3.getObject(params).promise()
+  console.log(result)
+  return result
 }
 
 module.exports = {
