@@ -31,13 +31,11 @@ const addImage = async (image) => {
 const getImage = async (id) => {
   const config = getConfig()
   const response = await axios.get(`${baseUrl}/${id}`, config)
-  console.log('image response;', response)
   const src = arrayBufferToBase64(response.data.Body.data)
   const image = {
     _id: id,
     src
   }
-  console.log('packaged image', image)
   return image
 }
 

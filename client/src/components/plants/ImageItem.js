@@ -14,17 +14,11 @@ class ImageItem extends React.Component {
   componentDidMount = async () => {
     let id = this.props.imageDetails._id
     let image = this.props.images.find(i => i._id === id)
-    console.log('images len', this.props.images.length)
-    console.log('searching for ', this.props.imageDetails._id)
     if (!image) {
       await this.props.getImage(id)
       image = this.props.images.find(i => i._id === id)
-      console.log('images len (again) ', this.props.images.length)
-      console.log(this.props.images[0])
-      console.log('image', image)
     }
     this.setState({ image: image })
-    console.log('current image: ', this.state.image)
   }
 
   render() {
