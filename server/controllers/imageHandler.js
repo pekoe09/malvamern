@@ -14,8 +14,8 @@ AWS.config.setPromisesDependency(bluebird)
 
 const s3 = new AWS.S3()
 
-const uploadFile = (buffer, version, timestamp) => {
-  const nameStart = `${timestamp}-${version}`
+const uploadFile = (buffer, version, timestamp, name) => {
+  const nameStart = `${name.replace(/\s/g,'')}-${timestamp}-${version}`
 
   const params = {
     Body: buffer,
@@ -36,7 +36,7 @@ const resize = (buffer, height) => {
     .toBuffer()
 }
 
-const uploadImage = async (path) => {
+const uploadImage = async (path, name) => {
   console.log('uploading path', path)
   const buffer = fs.readFileSync(path)
   const type = fileType(buffer)
@@ -59,8 +59,8 @@ const uploadImage = async (path) => {
     }
   }
   for (var key in versions) {
-    let resizedBuffer = await resize(buffer, versions[key].height, timestamp)
-    versions[key].result = await uploadFile(resizedBuffer, key)
+    let resizedBuffer = await resize(buffer, versions[key].height)
+    versions[key].result = await uploadFile(resizedBuffer, key, timestamp, name)
   }
   return versions
 }

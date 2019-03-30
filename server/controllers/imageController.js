@@ -13,10 +13,8 @@ imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
     err.isBadRequest = true
     throw err
   }
-  console.log('found image record', image)
   const requestedSize = req.query.size
   let awsKeyName = 'awsKey'
-  console.log('Requested size', requestedSize)
   if (requestedSize === 'large') {
     awsKeyName = 'awsKeyLarge'
   } else if (requestedSize === 'small') {
@@ -31,7 +29,6 @@ imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
     err.isUnauthorizedAttempt = true
     throw err
   }
-  console.log(result)
   res.json(result)
 }))
 
@@ -52,7 +49,7 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
 
   let savedImage = null
   try {
-    savedImage = await uploadImage(path)
+    savedImage = await uploadImage(path, req.body.name)
   } catch (error) {
     console.log(error)
     let err = new Error('Could not save the image in storage!')
