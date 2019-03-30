@@ -48,11 +48,11 @@ export const addImage = (image) => {
   }
 }
 
-export const getImage = id => {
+export const getImage = (id, size) => {
   return async (dispatch) => {
     dispatch(getImageBegin())
     try {
-      const image = await imageService.getImage(id)
+      const image = await imageService.getImage(id, size)
       dispatch(getImageSuccess(image))
     } catch (error) {
       console.log(error)

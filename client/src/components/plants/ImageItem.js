@@ -7,24 +7,25 @@ class ImageItem extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      image: ''
+      imageSrc: ''
     }
   }
 
   componentDidMount = async () => {
     let id = this.props.imageDetails._id
     let image = this.props.images.find(i => i._id === id)
-    if (!image) {
-      await this.props.getImage(id)
+    if (!image || !image.small) {
+      await this.props.getImage(id, 'small')
       image = this.props.images.find(i => i._id === id)
     }
-    this.setState({ image: image })
+    console.log('found image', image)
+    this.setState({ imageSrc: (image && image.small) ? image.small : '' })
   }
 
   render() {
     return (
       <div>
-        <img src={this.state.image.src} />
+        <img src={this.state.imageSrc} />
       </div>
     )
   }

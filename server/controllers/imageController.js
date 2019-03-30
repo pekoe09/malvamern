@@ -7,7 +7,6 @@ const Plant = require('../models/plant')
 const { uploadImage, downloadImage } = require('./imageHandler')
 
 imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
-  console.log('image file get hit')
   const image = await Image.findById(req.params.id)
   if (!image) {
     let err = new Error('Image not found!')
@@ -15,9 +14,17 @@ imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
     throw err
   }
   console.log('found image record', image)
+  const requestedSize = req.query.size
+  let awsKeyName = 'awsKey'
+  console.log('Requested size', requestedSize)
+  if (requestedSize === 'large') {
+    awsKeyName = 'awsKeyLarge'
+  } else if (requestedSize === 'small') {
+    awsKeyName = 'awsKeySmall'
+  }
   let result = null
   try {
-    result = await downloadImage(image.awsKey)
+    result = await downloadImage(image[awsKeyName])
   } catch (error) {
     console.log(error)
     let err = new Error('Image unavailable!')
@@ -29,14 +36,12 @@ imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
 }))
 
 imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
-  console.log('image details hit')
   const image = await Image.findById(req.params.id)
   if (!image) {
     let err = new Error('Image not found!')
     err.isBadRequest = true
     throw err
   }
-  console.log(image)
   res.json(image)
 }))
 

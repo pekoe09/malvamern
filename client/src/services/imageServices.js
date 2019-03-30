@@ -28,14 +28,16 @@ const addImage = async (image) => {
   return response.data
 }
 
-const getImage = async (id) => {
+const getImage = async (id, size) => {
   const config = getConfig()
-  const response = await axios.get(`${baseUrl}/${id}`, config)
+  const url = size ? `${baseUrl}/${id}?size=${size}` : `${baseUrl}/${id}`
+  const response = await axios.get(url, config)
   const src = arrayBufferToBase64(response.data.Body.data)
   const image = {
     _id: id,
-    src
+    size: size ? size : 'original'
   }
+  image[size] = src
   return image
 }
 
