@@ -18,7 +18,6 @@ class ImageItem extends React.Component {
       await this.props.getImage(id, 'small')
       image = this.props.images.find(i => i._id === id)
     }
-    console.log('found image', image)
     this.setState({ imageSrc: (image && image.small) ? image.small : '' })
   }
 
