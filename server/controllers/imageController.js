@@ -55,18 +55,18 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     throw err
   }
 
+  console.log('Imagehandler call result', savedImage)
+
   let image = new Image({
     name: req.body.name,
     ordinality: req.body.ordinality,
     caption: '',
-    awsKey: savedImage.Key,
-    plantId: req.body.plantId,
-    isThumbnail: false
+    awsKey: savedImage.original.result.Key,
+    awsKeySmall: savedImage.small.result.Key,
+    awsKeyLarge: savedImage.large.result.Key,
+    plantId: req.body.plantId
   })
   image = await image.save()
-  console.log('saved image record', image)
-  const imageInDb = await Image.findById(image._id)
-  console.log('verified image record', imageInDb)
 
   if (image.plantId) {
     const imageRef = {
@@ -74,15 +74,10 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
       isThumbnail: image.isThumbnail,
       awsKey: image.awsKey
     }
-    console.log('imageref', imageRef)
     let plant = await Plant.findById(image.plantId)
-    console.log('found plant', plant)
     plant.images = plant.images ? plant.images.push(imageRef) : [imageRef]
-    console.log('enriched plant', plant)
     plant = await Plant.findByIdAndUpdate(image.plantId, plant)
-    console.log('updated plant', plant)
   }
-
 
   res.status(201).json(image)
 }))

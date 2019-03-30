@@ -1,16 +1,5 @@
 const mongoose = require('mongoose')
 
-const imageRefSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
-  },
-  awsKey: {
-    type: String,
-    required: true
-  }
-})
-
 const imageSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -26,17 +15,14 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  awsKeySmall: {
+    type: String
+  },
+  awsKeyLarge: {
+    type: String
+  },
   plantId: {
     type: mongoose.Schema.Types.ObjectId
-  },
-  isThumbnail: {
-    type: Boolean
-  },
-  largeVersion: {
-    type: imageRefSchema
-  },
-  smallVersion: {
-    type: imageRefSchema
   }
 })
 

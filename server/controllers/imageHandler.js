@@ -2,6 +2,7 @@ const AWS = require('aws-sdk')
 const fs = require('fs')
 const fileType = require('file-type')
 const bluebird = require('bluebird')
+const sharp = require('sharp')
 const config = require('../../config/config')
 
 AWS.config.update({
@@ -13,41 +14,63 @@ AWS.config.setPromisesDependency(bluebird)
 
 const s3 = new AWS.S3()
 
-const uploadFile = (buffer, name, type) => {
+const uploadFile = (buffer, version, timestamp) => {
+  const nameStart = `${timestamp}-${version}`
+
   const params = {
     Body: buffer,
     Bucket: config.s3Bucket,
-    ContentType: type.mime,
-    Key: `${name}.${type.ext}`
+    ContentType: 'image-jpeg',
+    Key: `${nameStart}.jpg`
   }
   return s3.upload(params).promise()
 }
 
-// const downloadFile = (key) => {
-//   const params = {
-//     Bucket: config.s3Bucket,
-//     Key: key
-//   }
-//   return s3.getObject(params).promise()
-// }
+const resize = (buffer, height) => {
+  return sharp(buffer)
+    .resize({
+      height,
+      withoutEnlargement: true
+    })
+    .jpeg()
+    .toBuffer()
+}
 
 const uploadImage = async (path) => {
+  console.log('uploading path', path)
   const buffer = fs.readFileSync(path)
   const type = fileType(buffer)
   const timestamp = Date.now().toString()
-  const name = `${timestamp}-lg`
-  const result = await uploadFile(buffer, name, type)
-  return result
+  const versions = {
+    original: {
+      version: 'or',
+      height: null,
+      result: null
+    },
+    large: {
+      version: 'lg',
+      height: 500,
+      result: null
+    },
+    small: {
+      version: 'sm',
+      height: 100,
+      result: null
+    }
+  }
+  for (var key in versions) {
+    let resizedBuffer = await resize(buffer, versions[key].height, timestamp)
+    versions[key].result = await uploadFile(resizedBuffer, key)
+  }
+  return versions
 }
 
-const downloadImage = async (key) => {  
+const downloadImage = async (key) => {
   const params = {
     Bucket: config.s3Bucket,
     Key: key
   }
-  console.log('getting with params', params)
   const result = await s3.getObject(params).promise()
-  console.log(result)
   return result
 }
 
