@@ -113,6 +113,7 @@ export const getImage = (id, size) => {
     dispatch(getImageBegin())
     try {
       const image = await imageService.getImage(id, size)
+      console.log('Deleted image in action', image)
       dispatch(getImageSuccess(image))
     } catch (error) {
       console.log(error)

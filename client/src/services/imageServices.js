@@ -42,6 +42,7 @@ const updateImage = async (image) => {
 const deleteImage = async (id) => {
   console.log('Deleting image (service)', id)
   const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
+  console.log('Deletion result', response.data)
   return response.data
 }
 

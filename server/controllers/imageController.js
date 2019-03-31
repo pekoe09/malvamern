@@ -60,7 +60,7 @@ imageRouter.delete('/:id', wrapAsync(async (req, res, next) => {
   }
 
   await Image.findByIdAndRemove(image._id)
-  res.status(204).end()
+  res.status(201).json(image)
 }))
 
 imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
