@@ -8,9 +8,11 @@ class ImageAdd extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      _id: '',
       name: '',
       ordinality: 0,
       image: null,
+      isEditing: false,
       touched: {
         name: false,
         ordinality: false
@@ -18,9 +20,12 @@ class ImageAdd extends React.Component {
     }
   }
 
-  componentDidMount = async () => {
+  setEditingImage = async () => {
+    console.log('Imagedetails prop', this.props.editingImage)
     if (this.props.editingImage) {
       this.setState({
+        isEditing: true,
+        _id: this.props.editingImage._id,
         name: this.props.editingImage.name,
         ordinality: this.props.editingImage.ordinality
       })
@@ -51,6 +56,7 @@ class ImageAdd extends React.Component {
     event.preventDefault()
     console.log(this.state.image)
     const image = {
+      _id: this.state._id,
       name: this.state.name,
       ordinality: this.state.ordinality,
       file: this.state.image
@@ -64,9 +70,11 @@ class ImageAdd extends React.Component {
 
   handleExit = () => {
     this.setState({
+      _id: '',
       name: '',
       ordinality: 0,
       image: null,
+      isEditing: false,
       touched: {
         name: false,
         ordinality: false
@@ -89,6 +97,20 @@ class ImageAdd extends React.Component {
     }
   }
 
+  addFileInput = (errors) => {
+    console.log('adding file input')
+    return (
+      <MalvaFormGroup validationState={this.getValidationState(errors, 'image')}>
+        <MalvaControlLabel>Tiedosto</MalvaControlLabel>
+        <FormControl
+          type='file'
+          name='image'
+          onChange={this.handleFileChange}
+        />
+      </MalvaFormGroup>
+    )
+  }
+
   render() {
     const errors = this.validate()
     const isEnabled = !Object.keys(errors).some(x => errors[x])
@@ -96,11 +118,13 @@ class ImageAdd extends React.Component {
     return (
       <Modal
         show={this.props.modalIsOpen}
+        onEnter={this.setEditingImage}
         onHide={this.handleCloseModal}
         onExit={this.handleExit}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Lisää kuva</Modal.Title>
+          {this.state.isEditing && <Modal.Title>Muokkaa kuvan tietoja</Modal.Title>}
+          {!this.state.isEditing && <Modal.Title>Lisää kuva</Modal.Title>}
         </Modal.Header>
 
         <Modal.Body>
@@ -126,14 +150,7 @@ class ImageAdd extends React.Component {
                 onBlur={this.handleBlur('ordinality')}
               />
             </MalvaFormGroup>
-            <MalvaFormGroup validationState={this.getValidationState(errors, 'image')}>
-              <MalvaControlLabel>Tiedosto</MalvaControlLabel>
-              <FormControl
-                type='file'
-                name='image'
-                onChange={this.handleFileChange}
-              />
-            </MalvaFormGroup>
+            {!this.state.isEditing && this.addFileInput(errors)}
           </MalvaForm>
         </Modal.Body>
 

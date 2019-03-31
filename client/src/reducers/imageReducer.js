@@ -2,6 +2,9 @@ import {
   IMAGE_CREATE_BEGIN,
   IMAGE_CREATE_SUCCESS,
   IMAGE_CREATE_FAILURE,
+  IMAGE_UPDATE_BEGIN,
+  IMAGE_UPDATE_SUCCESS,
+  IMAGE_UPDATE_FAILURE,
   IMAGE_GET_BEGIN,
   IMAGE_GET_SUCCESS,
   IMAGE_GET_FAILURE
@@ -28,6 +31,24 @@ const imageReducer = (store = initialState, action) => {
         error: null
       }
     case IMAGE_CREATE_FAILURE:
+      return {
+        ...store,
+        uploading: false,
+        error: action.payload.error
+      }
+    case IMAGE_UPDATE_BEGIN:
+      return {
+        ...store,
+        uploading: true,
+        error: null
+      }
+    case IMAGE_UPDATE_SUCCESS:
+      return {
+        ...store,
+        uploading: false,
+        error: null
+      }
+    case IMAGE_UPDATE_FAILURE:
       return {
         ...store,
         uploading: false,

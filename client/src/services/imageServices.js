@@ -28,6 +28,17 @@ const addImage = async (image) => {
   return response.data
 }
 
+const updateImage = async (image) => {
+  console.log('Updating image', image)
+  const updatedImage = {
+    name: image.name,
+    ordinality: image.ordinality
+  }
+  const response = await axios.put(`${baseUrl}/details/${image._id}`, updatedImage, getConfig())
+  console.log('Got image update response', response.data)
+  return response.data
+}
+
 const getImage = async (id, size) => {
   const config = getConfig()
   const url = size ? `${baseUrl}/${id}?size=${size}` : `${baseUrl}/${id}`
@@ -43,5 +54,6 @@ const getImage = async (id, size) => {
 
 export default {
   addImage,
+  updateImage,
   getImage
 }

@@ -12,7 +12,7 @@ import Select from 'react-select'
 import ImageAdd from './imageAdd'
 import ImageItem from './ImageItem'
 import { getPlant, updatePlant } from '../../actions/plantActions'
-import { addImage } from '../../actions/imageActions'
+import { addImage, editImage } from '../../actions/imageActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantEdit extends React.Component {
@@ -256,21 +256,26 @@ class PlantEdit extends React.Component {
   }
 
   handleSaveImage = async (image) => {
+    console.log('Saving image', image)
     image.plantId = this.state._id
-    await this.props.addImage(image)
+    if (!image._id) {
+      await this.props.addImage(image)
+    } else {
+      await this.props.editImage(image)
+    }
     if (!this.props.imageError) {
       this.setState({
         openImageAddModal: false,
         editingImage: null
       })
       this.props.addUIMessage(
-        `Kuva ${image.name} lisätty kasviin!`,
+        `Kuva ${image.name} tallennettu kasviin!`,
         'success',
         10
       )
     } else {
       this.setState({
-        modalError: `Kuvaa ${image.name} ei pystytty lisäämään!`
+        modalError: `Kuvaa ${image.name} ei pystytty tallentamaan!`
       })
     }
   }
@@ -718,6 +723,7 @@ export default withRouter(connect(
     getPlant,
     updatePlant,
     addImage,
+    editImage,
     addUIMessage
   }
 )(PlantEdit))

@@ -42,6 +42,49 @@ imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
   res.json(image)
 }))
 
+imageRouter.put('/details/:id', wrapAsync(async (req, res, next) => {
+  let image = await Image.findById(req.params.id)
+  if (!image) {
+    let err = new Error('Image not found!')
+    err.isBadRequest = true
+    throw err
+  }
+
+  image.name = req.body.name
+  image.ordinality = req.body.ordinality
+  image = await Image.findByIdAndUpdate(image._id, image, { new: true })
+
+  if (image.plantId) {
+    let plant = await Plant.findById(image.plantId)
+    console.log('found plant', plant)
+    plant.images = plant.images.map(i => {
+      console.log('i', i._id)
+      console.log('image', image._id)
+      console.log(i._id.equals(image._id))
+      if (i._id.equals(image._id)) {
+        console.log('found image match')
+        console.log({ ...i, name: image.name, ordinality: image.ordinality })
+        return {
+          _id: image.id,
+          name: image.name,
+          ordinality: image.ordinality,
+          caption: i.caption,
+          awsKey: i.awsKey,
+          awsKeySmall: i.awsKeySmall,
+          awsKeyLarge: i.awsKeyLarge
+        }
+      } else {
+        return i
+      }
+    })
+    console.log('plant images', plant.images)
+    plant = await Plant.findByIdAndUpdate(plant._id, plant, { new: true })
+    console.log('updated plant', plant)
+  }
+
+  res.status(201).json(image)
+}))
+
 imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, next) => {
   checkUser(req)
 
