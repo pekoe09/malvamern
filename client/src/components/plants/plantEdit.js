@@ -75,7 +75,6 @@ class PlantEdit extends React.Component {
   }
 
   componentDidMount = async () => {
-    console.log('plantedit mounted!')
     const id = this.props.match.params.id
     let plant = this.props.plantCache.find(p => p._id === id)
     if (!plant) {
@@ -85,7 +84,6 @@ class PlantEdit extends React.Component {
     const flowerColors = plant.flowerColors.map(f => {
       return _.find(colorList, c => c.value === f)
     })
-    console.log(plant.images)
     this.setState({
       plant: plant,
       _id: plant._id,
@@ -248,14 +246,13 @@ class PlantEdit extends React.Component {
   }
 
   handleClickImage = (imageDetails) => {
-    console.log('Image clicked:', imageDetails)
     this.setState({
       editingImage: imageDetails
     })
     this.toggleImageAddOpen()
   }
-  
-  
+
+
   handleSaveImage = async (image) => {
     image.plantId = this.state._id
     if (!image._id) {
@@ -281,7 +278,6 @@ class PlantEdit extends React.Component {
   }
 
   handleDeleteImage = async (image) => {
-    console.log('Deleting image', image)
     await this.props.deleteImage(image._id)
     if (!this.props.imageError) {
       this.setState({
@@ -301,8 +297,13 @@ class PlantEdit extends React.Component {
   }
 
   mapImages = () => {
-    if (this.state.images.length > 0) {
-      return this.state.images.map(i =>
+    console.log('Mapping images')
+    let images = this.state.images
+    if (this.state._id) {
+      images = this.props.plantCache.find(p => p._id === this.state._id).images
+    }
+    if (images.length > 0) {
+      return images.map(i =>
         <ImageItem key={i._id} imageDetails={i} handleClick={this.handleClickImage} />
       )
     } else {

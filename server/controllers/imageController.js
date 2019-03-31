@@ -52,7 +52,6 @@ imageRouter.delete('/:id', wrapAsync(async (req, res, next) => {
 
   if (image.plantId) {
     let plant = await Plant.findById(image.plantId)
-    console.log('found plant', plant)
     if (plant) {
       plant.images = plant.images.filter(i => !i._id.equals(image._id))
       plant = await Plant.findByIdAndUpdate(plant._id, plant, { new: true })

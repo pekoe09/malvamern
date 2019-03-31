@@ -65,10 +65,6 @@ const imageReducer = (store = initialState, action) => {
         error: null
       }
     case IMAGE_DELETE_SUCCESS:
-      console.log('items before filtering', store.items)
-      console.log('filtering by', action.payload.image)
-      console.log('items after filtering', store.items.filter(i => i._id !== action.payload.image._id))
-
       return {
         ...store,
         items: store.items.filter(i => i._id !== action.payload.image._id),

@@ -21,28 +21,21 @@ const addImage = async (image) => {
   formData.append('name', image.name)
   formData.append('ordinality', image.ordinality)
   formData.append('plantId', image.plantId)
-  for (var key of formData.entries()) {
-    console.log(key[0] + ': ' + key[1])
-  }
   const response = await axios.post(`${baseUrl}/upload`, formData, config)
   return response.data
 }
 
 const updateImage = async (image) => {
-  console.log('Updating image', image)
   const updatedImage = {
     name: image.name,
     ordinality: image.ordinality
   }
   const response = await axios.put(`${baseUrl}/details/${image._id}`, updatedImage, getConfig())
-  console.log('Got image update response', response.data)
   return response.data
 }
 
 const deleteImage = async (id) => {
-  console.log('Deleting image (service)', id)
   const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
-  console.log('Deletion result', response.data)
   return response.data
 }
 

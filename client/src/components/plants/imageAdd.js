@@ -21,7 +21,6 @@ class ImageAdd extends React.Component {
   }
 
   setEditingImage = async () => {
-    console.log('Imagedetails prop', this.props.editingImage)
     if (this.props.editingImage) {
       this.setState({
         isEditing: true,
@@ -37,7 +36,6 @@ class ImageAdd extends React.Component {
   }
 
   handleFileChange = (event) => {
-    console.log(event.target.files)
     this.setState({
       image: event.target.files[0],
     })
@@ -54,7 +52,6 @@ class ImageAdd extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(this.state.image)
     const image = {
       _id: this.state._id,
       name: this.state.name,
