@@ -24,7 +24,9 @@ class ImageItem extends React.Component {
   render() {
     return (
       <div>
-        <img src={this.state.imageSrc} />
+        <img
+          src={this.state.imageSrc}
+          onClick={() => this.props.handleClick(this.props.imageDetails)} />
       </div>
     )
   }
@@ -42,5 +44,6 @@ export default connect(
 )(ImageItem)
 
 ImageItem.propTypes = {
-  imageDetails: PropTypes.object
+  imageDetails: PropTypes.object,
+  handleClick: PropTypes.func
 }

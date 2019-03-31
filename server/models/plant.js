@@ -90,12 +90,25 @@ const plantSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       required: true
     },
-    isThumbnail: {
-      type: Boolean
-    },
-    awskey: {
+    name: {
       type: String,
       required: true
+    },
+    ordinality: {
+      type: Number
+    },
+    caption: {
+      type: String
+    },
+    awsKey: {
+      type: String,
+      required: true
+    },
+    awsKeySmall: {
+      type: String
+    },
+    awsKeyLarge: {
+      type: String
     }
   }]
 })

@@ -57,8 +57,6 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     throw err
   }
 
-  console.log('Imagehandler call result', savedImage)
-
   let image = new Image({
     name: req.body.name,
     ordinality: req.body.ordinality,
@@ -72,10 +70,12 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
 
   if (image.plantId) {
     const imageRef = {
-      _id: image._id,
-      isThumbnail: image.isThumbnail,
-      awsKey: image.awsKey
+      ...image._doc
     }
+    console.log('imageref', imageRef)
+    delete imageRef.plantId
+    delete imageRef.__v
+    console.log('imageref', imageRef)
     let plant = await Plant.findById(image.plantId)
     plant.images = plant.images ? plant.images.push(imageRef) : [imageRef]
     plant = await Plant.findByIdAndUpdate(image.plantId, plant)

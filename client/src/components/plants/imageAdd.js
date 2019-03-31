@@ -1,7 +1,7 @@
 import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Modal, FormControl, Checkbox, Alert } from 'react-bootstrap'
+import { Modal, FormControl, Alert } from 'react-bootstrap'
 import { MalvaForm, MalvaControlLabel, MalvaFormGroup, MalvaButton } from '../common/MalvaStyledComponents'
 
 class ImageAdd extends React.Component {
@@ -15,6 +15,15 @@ class ImageAdd extends React.Component {
         name: false,
         ordinality: false
       }
+    }
+  }
+
+  componentDidMount = async () => {
+    if (this.props.editingImage) {
+      this.setState({
+        name: this.props.editingImage.name,
+        ordinality: this.props.editingImage.ordinality
+      })
     }
   }
 
@@ -162,6 +171,7 @@ export default connect(
 
 ImageAdd.propTypes = {
   modalIsOpen: propTypes.bool.isRequired,
+  editingImage: propTypes.object,
   closeModal: propTypes.func.isRequired,
   handleSave: propTypes.func.isRequired,
   modalError: propTypes.string.isRequired

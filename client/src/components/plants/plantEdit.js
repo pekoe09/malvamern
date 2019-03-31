@@ -46,6 +46,7 @@ class PlantEdit extends React.Component {
       images: [],
       openImageAddModal: false,
       modalError: '',
+      editingImage: null,
       touched: {
         name: false,
         scientificName: false,
@@ -231,6 +232,11 @@ class PlantEdit extends React.Component {
   }
 
   toggleImageAddOpen = () => {
+    if (this.state.openImageAddModal) {
+      this.setState({
+        editingImage: null
+      })
+    }
     this.setState({
       openImageAddModal: !this.state.openImageAddModal,
       modalError: ''
@@ -241,12 +247,21 @@ class PlantEdit extends React.Component {
     this.toggleImageAddOpen()
   }
 
+  handleClickImage = (imageDetails) => {
+    console.log('Image clicked:', imageDetails)
+    this.setState({
+      editingImage: imageDetails
+    })
+    this.toggleImageAddOpen()
+  }
+
   handleSaveImage = async (image) => {
     image.plantId = this.state._id
     await this.props.addImage(image)
     if (!this.props.imageError) {
       this.setState({
-        openImageAddModal: false
+        openImageAddModal: false,
+        editingImage: null
       })
       this.props.addUIMessage(
         `Kuva ${image.name} lisätty kasviin!`,
@@ -263,7 +278,7 @@ class PlantEdit extends React.Component {
   mapImages = () => {
     if (this.state.images.length > 0) {
       return this.state.images.map(i =>
-        <ImageItem key={i._id} imageDetails={i} />
+        <ImageItem key={i._id} imageDetails={i} handleClick={this.handleClickImage} />
       )
     } else {
       return <div>Kuvia ei vielä ole...</div>
@@ -678,6 +693,7 @@ class PlantEdit extends React.Component {
 
         <ImageAdd
           modalIsOpen={this.state.openImageAddModal}
+          editingImage={this.state.editingImage}
           closeModal={this.toggleImageAddOpen}
           handleSave={this.handleSaveImage}
           modalError={this.state.modalError}
