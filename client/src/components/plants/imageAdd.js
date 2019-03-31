@@ -98,7 +98,6 @@ class ImageAdd extends React.Component {
   }
 
   addFileInput = (errors) => {
-    console.log('adding file input')
     return (
       <MalvaFormGroup validationState={this.getValidationState(errors, 'image')}>
         <MalvaControlLabel>Tiedosto</MalvaControlLabel>
@@ -108,6 +107,23 @@ class ImageAdd extends React.Component {
           onChange={this.handleFileChange}
         />
       </MalvaFormGroup>
+    )
+  }
+
+  addDeleteBtn = () => {
+    return (
+      <MalvaButton
+        name='deletebtn'
+        onClick={() => this.props.handleDelete(
+          {
+            _id: this.state._id,
+            name: this.props.editingImage.name
+          }
+        )}
+        btntype='danger'
+      >
+        Poista
+      </MalvaButton>
     )
   }
 
@@ -170,8 +186,8 @@ class ImageAdd extends React.Component {
           >
             Peruuta
           </MalvaButton>
+          {this.state.isEditing && this.addDeleteBtn()}
         </Modal.Footer>
-
       </Modal>
     )
   }
@@ -191,5 +207,6 @@ ImageAdd.propTypes = {
   editingImage: propTypes.object,
   closeModal: propTypes.func.isRequired,
   handleSave: propTypes.func.isRequired,
+  handleDelete: propTypes.func.isRequired,
   modalError: propTypes.string.isRequired
 }

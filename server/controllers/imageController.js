@@ -4,7 +4,7 @@ const multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 const Image = require('../models/image')
 const Plant = require('../models/plant')
-const { uploadImage, downloadImage } = require('./imageHandler')
+const { uploadImage, downloadImage, deleteImage } = require('./imageHandler')
 
 imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
   const image = await Image.findById(req.params.id)
@@ -32,6 +32,37 @@ imageRouter.get('/:id', wrapAsync(async (req, res, next) => {
   res.json(result)
 }))
 
+imageRouter.delete('/:id', wrapAsync(async (req, res, next) => {
+  checkUser(req)
+  const image = await Image.findById(req.params.id)
+  if (!image) {
+    let err = new Error('Image not found!')
+    err.isBadRequest = true
+    throw err
+  }
+
+  try {
+    await deleteImage([image.awsKey, image.awsKeyLarge, image.awsKeySmall])
+  } catch (error) {
+    console.log(error)
+    let err = new Error('Image deletion failed!')
+    err.isUnauthorizedAttempt = true
+    throw err
+  }
+
+  if (image.plantId) {
+    let plant = await Plant.findById(image.plantId)
+    console.log('found plant', plant)
+    if (plant) {
+      plant.images = plant.images.filter(i => !i._id.equals(image._id))
+      plant = await Plant.findByIdAndUpdate(plant._id, plant, { new: true })
+    }
+  }
+
+  await Image.findByIdAndRemove(image._id)
+  res.status(204).end()
+}))
+
 imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
   const image = await Image.findById(req.params.id)
   if (!image) {
@@ -43,6 +74,7 @@ imageRouter.get('/details/:id', wrapAsync(async (req, res, next) => {
 }))
 
 imageRouter.put('/details/:id', wrapAsync(async (req, res, next) => {
+  checkUser(req)
   let image = await Image.findById(req.params.id)
   if (!image) {
     let err = new Error('Image not found!')
@@ -56,14 +88,8 @@ imageRouter.put('/details/:id', wrapAsync(async (req, res, next) => {
 
   if (image.plantId) {
     let plant = await Plant.findById(image.plantId)
-    console.log('found plant', plant)
     plant.images = plant.images.map(i => {
-      console.log('i', i._id)
-      console.log('image', image._id)
-      console.log(i._id.equals(image._id))
       if (i._id.equals(image._id)) {
-        console.log('found image match')
-        console.log({ ...i, name: image.name, ordinality: image.ordinality })
         return {
           _id: image.id,
           name: image.name,
@@ -77,9 +103,7 @@ imageRouter.put('/details/:id', wrapAsync(async (req, res, next) => {
         return i
       }
     })
-    console.log('plant images', plant.images)
     plant = await Plant.findByIdAndUpdate(plant._id, plant, { new: true })
-    console.log('updated plant', plant)
   }
 
   res.status(201).json(image)
@@ -115,10 +139,8 @@ imageRouter.post('/upload', upload.single('file'), wrapAsync(async (req, res, ne
     const imageRef = {
       ...image._doc
     }
-    console.log('imageref', imageRef)
     delete imageRef.plantId
     delete imageRef.__v
-    console.log('imageref', imageRef)
     let plant = await Plant.findById(image.plantId)
     plant.images = plant.images ? plant.images.push(imageRef) : [imageRef]
     plant = await Plant.findByIdAndUpdate(image.plantId, plant)

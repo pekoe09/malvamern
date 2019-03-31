@@ -12,7 +12,7 @@ import Select from 'react-select'
 import ImageAdd from './imageAdd'
 import ImageItem from './ImageItem'
 import { getPlant, updatePlant } from '../../actions/plantActions'
-import { addImage, editImage } from '../../actions/imageActions'
+import { addImage, editImage, deleteImage } from '../../actions/imageActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantEdit extends React.Component {
@@ -254,9 +254,9 @@ class PlantEdit extends React.Component {
     })
     this.toggleImageAddOpen()
   }
-
+  
+  
   handleSaveImage = async (image) => {
-    console.log('Saving image', image)
     image.plantId = this.state._id
     if (!image._id) {
       await this.props.addImage(image)
@@ -276,6 +276,26 @@ class PlantEdit extends React.Component {
     } else {
       this.setState({
         modalError: `Kuvaa ${image.name} ei pystytty tallentamaan!`
+      })
+    }
+  }
+
+  handleDeleteImage = async (image) => {
+    console.log('Deleting image', image)
+    await this.props.deleteImage(image._id)
+    if (!this.props.imageError) {
+      this.setState({
+        openImageAddModal: false,
+        editingImage: null
+      })
+      this.props.addUIMessage(
+        `Kuva ${image.name} poistettu!`,
+        'success',
+        10
+      )
+    } else {
+      this.setState({
+        modalError: `Kuvaa ${image.name} ei pystytty poistamaan!`
       })
     }
   }
@@ -701,6 +721,7 @@ class PlantEdit extends React.Component {
           editingImage={this.state.editingImage}
           closeModal={this.toggleImageAddOpen}
           handleSave={this.handleSaveImage}
+          handleDelete={this.handleDeleteImage}
           modalError={this.state.modalError}
         />
       </div>
@@ -724,6 +745,7 @@ export default withRouter(connect(
     updatePlant,
     addImage,
     editImage,
+    deleteImage,
     addUIMessage
   }
 )(PlantEdit))

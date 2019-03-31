@@ -39,6 +39,12 @@ const updateImage = async (image) => {
   return response.data
 }
 
+const deleteImage = async (id) => {
+  console.log('Deleting image (service)', id)
+  const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
+  return response.data
+}
+
 const getImage = async (id, size) => {
   const config = getConfig()
   const url = size ? `${baseUrl}/${id}?size=${size}` : `${baseUrl}/${id}`
@@ -55,5 +61,6 @@ const getImage = async (id, size) => {
 export default {
   addImage,
   updateImage,
+  deleteImage,
   getImage
 }

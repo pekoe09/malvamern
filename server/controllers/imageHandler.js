@@ -15,7 +15,7 @@ AWS.config.setPromisesDependency(bluebird)
 const s3 = new AWS.S3()
 
 const uploadFile = (buffer, version, timestamp, name) => {
-  const nameStart = `${name.replace(/\s/g,'')}-${timestamp}-${version}`
+  const nameStart = `${name.replace(/\s/g, '')}-${timestamp}-${version}`
 
   const params = {
     Body: buffer,
@@ -74,7 +74,24 @@ const downloadImage = async (key) => {
   return result
 }
 
+const deleteImage = async (keyArray) => {
+  console.log('key array', keyArray)
+  const params = {
+    Bucket: config.s3Bucket
+  }
+  if (keyArray && keyArray.length > 0) {
+    keyArray.forEach(async (key) => {
+      console.log('aws deleting', key)
+      params.Key = key
+      let result = await s3.deleteObject(params).promise()
+      console.log('aws deletion result', result)
+    })
+  }
+  return null
+}
+
 module.exports = {
   uploadImage,
-  downloadImage
+  downloadImage,
+  deleteImage
 }

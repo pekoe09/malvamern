@@ -23,7 +23,8 @@ import {
 } from '../actions/plantActions'
 import {
   IMAGE_CREATE_SUCCESS,
-  IMAGE_UPDATE_SUCCESS
+  IMAGE_UPDATE_SUCCESS,
+  IMAGE_DELETE_SUCCESS
 } from '../actions/imageActions'
 
 const initialState = {
@@ -212,6 +213,29 @@ const plantReducer = (store = initialState, action) => {
             {
               ...p,
               images: p.images.map(i => i._id === updatedImage._id ? updatedImage : i)
+            }
+            : p
+          )
+        }
+      } else {
+        return store
+      }
+    case IMAGE_DELETE_SUCCESS:
+      const deletedImage = action.payload.image
+      if (deletedImage.plantId) {
+        return {
+          ...store,
+          items: store.items.map(p => p._id === deletedImage.plantId ?
+            {
+              ...p,
+              images: p.images.filter(i => i._id !== deletedImage._id)
+            }
+            : p
+          ),
+          cache: store.cache.map(p => p._id === deletedImage.plantId ?
+            {
+              ...p,
+              images: p.images.filter(i => i._id !== deletedImage._id)
             }
             : p
           )
