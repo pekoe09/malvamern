@@ -78,7 +78,8 @@ plantRouter.post('/', wrapAsync(async (req, res, next) => {
     description: req.body.description,
     shortDescription: req.body.shortDescription,
     environmentRequirements: req.body.environmentRequirements,
-    careInstructions: req.body.careInstructions
+    careInstructions: req.body.careInstructions,
+    images: []
   })
   plant = await plant.save()
   res.status(201).json(plant)

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Col, Row } from 'react-bootstrap'
 import { MalvaVerticalLinkButton, MalvaButton } from '../common/MalvaStyledComponents'
+import ImageItem from './ImageItem'
 
 const plantListItemStyle = {
   display: 'grid',
@@ -34,12 +35,22 @@ const plantListItemBodyStyle = {
   fontFamily: 'sans-serif'
 }
 
+const getThumbnail = plant => {
+  if (plant.images && plant.images.length > 0) {
+    return <ImageItem imageDetails={plant.images.sort((a, b) => {
+      return a.ordinality - b.ordinality
+    })[0]} />
+  } else {
+    return <div style={{ background: 'lightgrey' }}>Image placeholder</div>
+  }
+}
+
 const PlantListItem = ({ plant, handleDelete, handleEdit }) => {
   return (
     <div style={plantListItemStyle}>
       <Row style={{ height: '100%' }}>
         <Col sm={2} style={{ display: 'grid', height: '100%' }}>
-          <div style={{ background: 'lightgrey' }}>Image placeholder</div>
+          {getThumbnail(plant)}
         </Col>
         <Col sm={10} style={{ padding: 0 }}>
           <div>

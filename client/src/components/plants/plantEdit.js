@@ -4,11 +4,15 @@ import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { Col, Row, FormControl, HelpBlock, Checkbox } from 'react-bootstrap'
 import { MalvaForm, MalvaControlLabel, MalvaFormGroup, MalvaButton, MalvaLinkButton } from '../common/MalvaStyledComponents'
+import { MalvaImageContainer } from '../common/MalvaElements'
 import NumberEntryField from '../common/NumberEntryField'
 import ViewHeader from '../common/ViewHeader'
 import colorList from './colorList'
 import Select from 'react-select'
+import ImageAdd from './imageAdd'
+import ImageItem from './ImageItem'
 import { getPlant, updatePlant } from '../../actions/plantActions'
+import { addImage, editImage, deleteImage } from '../../actions/imageActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 class PlantEdit extends React.Component {
@@ -39,6 +43,10 @@ class PlantEdit extends React.Component {
       shortDescription: '',
       environmentRequirements: '',
       careInstructions: '',
+      images: [],
+      openImageAddModal: false,
+      modalError: '',
+      editingImage: null,
       touched: {
         name: false,
         scientificName: false,
@@ -100,7 +108,8 @@ class PlantEdit extends React.Component {
       description: plant.description,
       shortDescription: plant.shortDescription,
       environmentRequirements: plant.environmentRequirements,
-      careInstructions: plant.careInstructions
+      careInstructions: plant.careInstructions,
+      images: plant.images
     })
   }
 
@@ -149,6 +158,7 @@ class PlantEdit extends React.Component {
       shortDescription: '',
       environmentRequirements: '',
       careInstructions: '',
+      images: [],
       touched: {
         name: false,
         scientificName: false,
@@ -216,6 +226,88 @@ class PlantEdit extends React.Component {
         'danger',
         10
       )
+    }
+  }
+
+  toggleImageAddOpen = () => {
+    if (this.state.openImageAddModal) {
+      this.setState({
+        editingImage: null
+      })
+    }
+    this.setState({
+      openImageAddModal: !this.state.openImageAddModal,
+      modalError: ''
+    })
+  }
+
+  handleAddImage = async () => {
+    this.toggleImageAddOpen()
+  }
+
+  handleClickImage = (imageDetails) => {
+    this.setState({
+      editingImage: imageDetails
+    })
+    this.toggleImageAddOpen()
+  }
+
+
+  handleSaveImage = async (image) => {
+    image.plantId = this.state._id
+    if (!image._id) {
+      await this.props.addImage(image)
+    } else {
+      await this.props.editImage(image)
+    }
+    if (!this.props.imageError) {
+      this.setState({
+        openImageAddModal: false,
+        editingImage: null
+      })
+      this.props.addUIMessage(
+        `Kuva ${image.name} tallennettu kasviin!`,
+        'success',
+        10
+      )
+    } else {
+      this.setState({
+        modalError: `Kuvaa ${image.name} ei pystytty tallentamaan!`
+      })
+    }
+  }
+
+  handleDeleteImage = async (image) => {
+    await this.props.deleteImage(image._id)
+    if (!this.props.imageError) {
+      this.setState({
+        openImageAddModal: false,
+        editingImage: null
+      })
+      this.props.addUIMessage(
+        `Kuva ${image.name} poistettu!`,
+        'success',
+        10
+      )
+    } else {
+      this.setState({
+        modalError: `Kuvaa ${image.name} ei pystytty poistamaan!`
+      })
+    }
+  }
+
+  mapImages = () => {
+    console.log('Mapping images')
+    let images = this.state.images
+    if (this.state._id) {
+      images = this.props.plantCache.find(p => p._id === this.state._id).images
+    }
+    if (images.length > 0) {
+      return images.map(i =>
+        <ImageItem key={i._id} imageDetails={i} handleClick={this.handleClickImage} />
+      )
+    } else {
+      return <div>Kuvia ei vielä ole...</div>
     }
   }
 
@@ -571,6 +663,28 @@ class PlantEdit extends React.Component {
               <HelpBlock>{errors['careInstructions']}</HelpBlock>
             </MalvaFormGroup>
 
+            <MalvaFormGroup>
+              <MalvaControlLabel>Kuvat</MalvaControlLabel>
+              <Row
+                style={{
+                  paddingLeft: 15,
+                  paddingBottom: 10
+                }}>
+                <MalvaButton
+                  name='addImageBtn'
+                  btntype='warning'
+                  onClick={this.handleAddImage}
+                >
+                  Lisää kuva
+                </MalvaButton>
+              </Row>
+              <MalvaImageContainer>
+                <div>
+                  {this.mapImages()}
+                </div>
+              </MalvaImageContainer>
+            </MalvaFormGroup>
+
             <Row style={{ paddingLeft: 15 }}>
               <MalvaButton
                 name='savebtn'
@@ -602,6 +716,15 @@ class PlantEdit extends React.Component {
 
           </MalvaForm>
         </Col>
+
+        <ImageAdd
+          modalIsOpen={this.state.openImageAddModal}
+          editingImage={this.state.editingImage}
+          closeModal={this.toggleImageAddOpen}
+          handleSave={this.handleSaveImage}
+          handleDelete={this.handleDeleteImage}
+          modalError={this.state.modalError}
+        />
       </div>
     )
   }
@@ -611,7 +734,9 @@ const mapStateToProps = store => ({
   plantCache: store.plants.cache,
   soilTypes: store.soilTypes.items,
   updating: store.plants.updating,
-  error: store.plants.error
+  error: store.plants.error,
+  imageUpdating: store.images.updating,
+  imageError: store.images.error
 })
 
 export default withRouter(connect(
@@ -619,6 +744,9 @@ export default withRouter(connect(
   {
     getPlant,
     updatePlant,
+    addImage,
+    editImage,
+    deleteImage,
     addUIMessage
   }
 )(PlantEdit))

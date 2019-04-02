@@ -1,6 +1,7 @@
 {
   "name": "malvaclient",
   "version": "0.0.1",
+  "homepage": "./",
   "private": true,
   "proxy": "http://localhost:3001",
   "scripts": {

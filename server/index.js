@@ -12,6 +12,7 @@ const { userExtractor } = require('./utils/userExtractor')
 
 const countryRouter = require('./controllers/countryController')
 const growthZoneRouter = require('./controllers/growthZoneController')
+const imageRouter = require('./controllers/imageController')
 const lightTypeRouter = require('./controllers/lightTypeController')
 const locationRouter = require('./controllers/locationController')
 const plantRouter = require('./controllers/plantController')
@@ -25,6 +26,7 @@ app.use(userExtractor)
 
 app.use('/api/countries', countryRouter)
 app.use('/api/growthzones', growthZoneRouter)
+app.use('/api/images', imageRouter)
 app.use('/api/lighttypes', lightTypeRouter)
 app.use('/api/locations', locationRouter)
 app.use('/api/plants', plantRouter)
@@ -34,6 +36,7 @@ app.use('/api/users', userRouter)
 app.use(express.static(path.resolve(__dirname, '../client/build')))
 
 app.get('*', (req, res) => {
+  console.log('unspecified request', req.url)
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
 })
 

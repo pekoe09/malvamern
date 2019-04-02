@@ -19,8 +19,13 @@ import {
   PLANT_UDPATE_FAILURE,
   PLANT_DELETE_BEGIN,
   PLANT_DELETE_SUCCESS,
-  PLANT_DELETE_FAILURE
+  PLANT_DELETE_FAILURE,
 } from '../actions/plantActions'
+import {
+  IMAGE_CREATE_SUCCESS,
+  IMAGE_UPDATE_SUCCESS,
+  IMAGE_DELETE_SUCCESS
+} from '../actions/imageActions'
 
 const initialState = {
   items: [],
@@ -142,7 +147,7 @@ const plantReducer = (store = initialState, action) => {
       return {
         ...store,
         items: store.items.map(p => p._id === updated._id ? updated : p),
-        cache: store.items.map(p => p._id === updated._id ? updated : p),
+        cache: store.cache.map(p => p._id === updated._id ? updated : p),
         updating: false,
         error: null
       }
@@ -170,6 +175,73 @@ const plantReducer = (store = initialState, action) => {
         ...store,
         deleting: false,
         error: action.payload.error
+      }
+    case IMAGE_CREATE_SUCCESS:
+      const image = action.payload.image
+      if (image.plantId) {
+        return {
+          ...store,
+          items: store.items.map(p => p._id === image.plantId ?
+            {
+              ...p,
+              images: p.images ? p.images.concat(image) : [image]
+            }
+            : p),
+          cache: store.cache.map(p => p._id === image.plantId ?
+            {
+              ...p,
+              images: p.images ? p.images.concat(image) : [image]
+            }
+            : p)
+        }
+      } else {
+        return store
+      }
+    case IMAGE_UPDATE_SUCCESS:
+      const updatedImage = action.payload.image
+      if (updatedImage.plantId) {
+        return {
+          ...store,
+          items: store.items.map(p => p._id === updatedImage.plantId ?
+            {
+              ...p,
+              images: p.images.map(i => i._id === updatedImage._id ? updatedImage : i)
+            }
+            : p
+          ),
+          cache: store.cache.map(p => p._id === updatedImage.plantId ?
+            {
+              ...p,
+              images: p.images.map(i => i._id === updatedImage._id ? updatedImage : i)
+            }
+            : p
+          )
+        }
+      } else {
+        return store
+      }
+    case IMAGE_DELETE_SUCCESS:
+      const deletedImage = action.payload.image
+      if (deletedImage.plantId) {
+        return {
+          ...store,
+          items: store.items.map(p => p._id === deletedImage.plantId ?
+            {
+              ...p,
+              images: p.images.filter(i => i._id !== deletedImage._id)
+            }
+            : p
+          ),
+          cache: store.cache.map(p => p._id === deletedImage.plantId ?
+            {
+              ...p,
+              images: p.images.filter(i => i._id !== deletedImage._id)
+            }
+            : p
+          )
+        }
+      } else {
+        return store
       }
     default:
       return store
