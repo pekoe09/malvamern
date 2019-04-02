@@ -37,9 +37,7 @@ const resize = (buffer, height) => {
 }
 
 const uploadImage = async (path, name) => {
-  console.log('uploading path', path)
   const buffer = fs.readFileSync(path)
-  const type = fileType(buffer)
   const timestamp = Date.now().toString()
   const versions = {
     original: {
@@ -75,16 +73,13 @@ const downloadImage = async (key) => {
 }
 
 const deleteImage = async (keyArray) => {
-  console.log('key array', keyArray)
   const params = {
     Bucket: config.s3Bucket
   }
   if (keyArray && keyArray.length > 0) {
     keyArray.forEach(async (key) => {
-      console.log('aws deleting', key)
       params.Key = key
-      let result = await s3.deleteObject(params).promise()
-      console.log('aws deletion result', result)
+      await s3.deleteObject(params).promise()
     })
   }
   return null
