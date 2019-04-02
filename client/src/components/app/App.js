@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import MalvaLayout from '../uiStructure/MalvaLayout'
 
 import CountryList from '../countries/countryList'
+import Diary from '../diary/Diary'
 import FrontPage from '../frontpage/FrontPage'
 import Garden from '../garden/Garden'
 import PlantAdd from '../plants/plantAdd'
@@ -19,6 +20,7 @@ class App extends React.Component {
       <MalvaLayout>
         <Route exact path='/' render={() => <FrontPage />} />
         <Route exact path='/countries' render={() => <CountryList />} />
+        <Route exact path='/diary' render={() => <Diary />} />
         <Route exact path='/garden' render={() => <Garden />} />
         <Route exact path='/plants' render={() => <PlantList />} />
         <Route exact path='/plants/add' render={() => <PlantAdd />} />
