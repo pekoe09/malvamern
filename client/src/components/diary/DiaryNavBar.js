@@ -1,9 +1,23 @@
 import React from 'react'
+import { Row, Col } from 'react-bootstrap'
+import { MalvaButton } from '../common/MalvaStyledComponents'
 
 const DiaryNavBar = () => {
   return (
     <div>
-      <h2>Diary navbar</h2>
+      <Row style={{ marginBottom: 5 }}>
+
+        <MalvaButton
+          name='addEntry'
+          btntype='primary'
+
+          style={{ float: 'right' }}
+        >
+          Lisää päiväkirjamerkintä
+        </MalvaButton>
+
+      </Row>
+
     </div>
   )
 }
