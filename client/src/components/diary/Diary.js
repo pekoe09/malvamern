@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import ViewHeader from '../common/ViewHeader'
 import DiaryNavBar from './DiaryNavBar'
 import DiarySideBar from './DiarySideBar'
@@ -8,15 +9,6 @@ import { Col, Row } from 'react-bootstrap'
 const mainColStyle = {
   padding: 0
 }
-
-const dates = [
-  '2018-12-06',
-  '2018-12-31',
-  '2019-03-01',
-  '2019-03-10',
-  '2019-03-05',
-  '2019-06-30'
-]
 
 class Diary extends React.Component {
   constructor() {
@@ -30,6 +22,10 @@ class Diary extends React.Component {
     this.setState({ date })
   }
 
+  getDates = () => {
+    return this.props.entries.map(e => e.date)
+  }
+
   render() {
     return (
       <div>
@@ -38,13 +34,13 @@ class Diary extends React.Component {
         <Row>
           <Col sm={10} style={mainColStyle}>
             <DatePage
-              entries={[]}
-              date={Date.now()}
+              entries={this.props.entries}
+              date={this.state.date}
             />
           </Col>
           <Col sm={2} style={mainColStyle}>
             <DiarySideBar
-              dates={dates}
+              dates={this.getDates()}
               handleDateClick={this.handleDateClick}
             />
           </Col>
@@ -54,4 +50,10 @@ class Diary extends React.Component {
   }
 }
 
-export default Diary
+const mapStateToProps = store => ({
+  entries: store.entries.items
+})
+
+export default connect(
+  mapStateToProps
+)(Diary)

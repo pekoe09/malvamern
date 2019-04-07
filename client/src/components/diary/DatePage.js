@@ -57,7 +57,7 @@ const DatePage = ({ entries, date }) => {
 export default DatePage
 
 DatePage.propTypes = {
-  date: PropTypes.number.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
   entries: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string.isRequired,
     title: PropTypes.string,

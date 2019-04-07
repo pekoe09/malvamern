@@ -6,6 +6,7 @@ import { login } from '../../actions/userActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 import { getAllCountries } from '../../actions/countryActions'
 import { getAllSoilTypes } from '../../actions/soilTypeActions'
+import { getAllEntries } from '../../actions/diaryActions'
 
 class Login extends React.Component {
   constructor(props) {
@@ -35,6 +36,8 @@ class Login extends React.Component {
       await this.props.getAllCountries()
       await this.props.getAllSoilTypes()
       console.log('Static data retrieved')
+      console.log('Getting personal data')
+      await this.props.getAllEntries()
     }
   }
 
@@ -76,6 +79,7 @@ export default withRouter(connect(
     login,
     addUIMessage,
     getAllCountries,
-    getAllSoilTypes
+    getAllSoilTypes,
+    getAllEntries
   }
 )(Login))

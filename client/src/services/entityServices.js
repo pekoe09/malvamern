@@ -13,8 +13,13 @@ const getOne = async (entityPlural, id) => {
   return response.data
 }
 
-const getAll = async (entityPlural) => {
-  const response = await axios.get(`${baseUrl}/${entityPlural}`)
+const getAll = async (entityPlural, userNeeded) => {
+  let response = null
+  if (userNeeded) {
+    response = await axios.get(`${baseUrl}/${entityPlural}`, getConfig())
+  } else {
+    response = await axios.get(`${baseUrl}/${entityPlural}`)
+  }
   return response.data
 }
 

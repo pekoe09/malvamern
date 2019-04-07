@@ -35,7 +35,7 @@ const mapDays = (datesSorted, year, month, handleDateClick) => {
   return days.map(d =>
     <li
       key={d}
-      onClick={() => handleDateClick(new Date(d, month, year))}
+      onClick={() => handleDateClick(new Date(year, month, d))}
     >
       {`${d}.${month + 1}.${year}`}
     </li>

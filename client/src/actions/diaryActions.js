@@ -73,7 +73,7 @@ export const getAllEntries = () => {
   return async (dispatch) => {
     dispatch(getAllEntriesBegin())
     try {
-      const entries = await entityService.getAll('diary')
+      const entries = await entityService.getAll('diary', true)
       dispatch(getAllEntriesSuccess(entries))
     } catch (error) {
       console.log(error)
