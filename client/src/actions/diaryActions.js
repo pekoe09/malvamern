@@ -73,7 +73,7 @@ export const getAllEntries = () => {
   return async (dispatch) => {
     dispatch(getAllEntriesBegin())
     try {
-      const entries = await entityService.getAll('entries')
+      const entries = await entityService.getAll('diary')
       dispatch(getAllEntriesSuccess(entries))
     } catch (error) {
       console.log(error)
@@ -86,7 +86,7 @@ export const addEntry = (entry) => {
   return async (dispatch) => {
     dispatch(addEntryBegin())
     try {
-      entry = await entityService.addEntity('entries', entry)
+      entry = await entityService.addEntity('diary', entry)
       dispatch(addEntrySuccess(entry))
     } catch (error) {
       console.log(error)
@@ -99,7 +99,7 @@ export const updateEntry = (entry) => {
   return async (dispatch) => {
     dispatch(updateEntryBegin())
     try {
-      entry = await entityService.updateEntity('entries', entry)
+      entry = await entityService.updateEntity('diary', entry)
       dispatch(updateEntrySuccess(entry))
     } catch (error) {
       console.log(error)
@@ -112,7 +112,7 @@ export const deleteEntry = (id) => {
   return async (dispatch) => {
     dispatch(deleteEntryBegin())
     try {
-      await entityService.removeEntity('entries', id)
+      await entityService.removeEntity('diary', id)
       dispatch(deleteEntrySuccess(id))
     } catch (error) {
       console.log(error)

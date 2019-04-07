@@ -2,14 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import DatePicker, { registerLocale, setDefaultLocale, getDefaultLocale } from 'react-datepicker'
+import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker'
 import fi from 'date-fns/locale/fi'
 import 'react-datepicker/dist/react-datepicker.css'
 import './diary.css'
 import { Col, Row, FormControl, HelpBlock } from 'react-bootstrap'
-import { MalvaForm, MalvaFormGroup, MalvaControlLabel, MalvaButton, MalvaLinkButton } from '../common/MalvaStyledComponents'
+import { MalvaForm, MalvaFormGroup, MalvaControlLabel } from '../common/MalvaStyledComponents'
+import FormButtons from '../common/FormButtons'
 import ViewHeader from '../common/ViewHeader'
-import { addEntry, deleteEntry } from '../../actions/diaryActions'
+import { addEntry, updateEntry, deleteEntry } from '../../actions/diaryActions'
 import { addUIMessage } from '../../actions/uiMessageActions'
 
 registerLocale('fi', fi)
@@ -19,6 +20,7 @@ class EntryEdit extends React.Component {
   constructor() {
     super()
     this.state = {
+      _id: '',
       date: new Date(),
       title: '',
       body: '',
@@ -32,10 +34,10 @@ class EntryEdit extends React.Component {
   }
 
   componentDidMount = async () => {
-    console.log('def locale:', getDefaultLocale())
     const editingEntry = this.props.editingEntry
     if (editingEntry) {
       this.setState({
+        _id: editingEntry._id,
         date: this.props.date,
         title: editingEntry.title,
         body: editingEntry.body,
@@ -64,10 +66,16 @@ class EntryEdit extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault()
     const entry = {
+      _id: this.state._id,
+      date: this.state.date,
       title: this.state.title,
       body: this.state.body
     }
-    await this.props.addEntry(entry)
+    if (entry._id) {
+      await this.props.updateEntry(entry)
+    } else {
+      await this.props.addEntry(entry)
+    }
     if (!this.props.error) {
       this.props.addUIMessage(
         `Merkintä lisätty päivälle ${this.state.date}!`,
@@ -95,44 +103,31 @@ class EntryEdit extends React.Component {
     }
   }
 
+  getButtons = (isEnabled) => {
+    return (
+      <FormButtons
+        handleSubmit={this.handleSubmit}
+        submitIsEnabled={isEnabled}
+        cancelUrl='/diary'
+        cancelBtnText='Päiväkirjaan'
+      />
+    )
+  }
+
   render() {
     const errors = this.validate()
     const isEnabled = !Object.keys(errors).some(x => errors[x])
 
     return (
       <div>
-        <div>
-          <ViewHeader
-            text={this.props.editingEntry ?
-              'Muokkaa päiväkirjamerkintää' :
-              'Tee päiväkirjamerkintä'}
-          />
-          <MalvaButton
-            name='savebtn'
-            btntype='primary'
-            onClick={this.handleSubmit}
-          >
-            Tallenna
-          </MalvaButton>
-          <MalvaLinkButton
-            text='Päiväkirjaan'
-            to='/diary'
-            btnType='default'
-          />
-          <MalvaButton
-            btntype='default'
-            onClick={this.handleClear}
-          >
-            Tyhjennä
-          </MalvaButton>
-          <MalvaButton
-            name='deletebtn'
-            btntype='danger'
-            onClick={this.handleDelete}
-          >
-            Poista
-          </MalvaButton>
-        </div>
+
+        <ViewHeader
+          text={this.props.editingEntry ?
+            'Muokkaa päiväkirjamerkintää' :
+            'Tee päiväkirjamerkintä'}
+        />
+
+        {this.getButtons(isEnabled)}
 
         <Col sm={6} style={{ padding: 0, marginBottom: 50 }}>
           <MalvaForm>
@@ -147,6 +142,7 @@ class EntryEdit extends React.Component {
                   onChange={this.handleDateChange}
                   todayButton={'Tänään'}
                   dateFormat="dd.MM.yyyy"
+                  onBlur={this.handleBlur('date')}
                 />
               </Row>
               <HelpBlock>{errors['date']}</HelpBlock>
@@ -171,40 +167,13 @@ class EntryEdit extends React.Component {
                 name='body'
                 value={this.state.body}
                 onChange={this.handleChange}
-                onBlur={this.handleBlur}
+                onBlur={this.handleBlur('body')}
                 rows={10}
               />
               <HelpBlock>{errors['body']}</HelpBlock>
             </MalvaFormGroup>
 
-            <Row style={{ paddingLeft: 15 }}>
-              <MalvaButton
-                name='savebtn'
-                disabled={!isEnabled}
-                btntype='primary'
-                onClick={this.handleSubmit}
-              >
-                Tallenna
-              </MalvaButton>
-              <MalvaLinkButton
-                text='Peruuta'
-                to='/plants'
-                btnType='default'
-              />
-              <MalvaButton
-                btntype='default'
-                onClick={this.handleClear}
-              >
-                Tyhjennä
-              </MalvaButton>
-              <MalvaButton
-                name='editbtn'
-                btntype='danger'
-                onClick={this.handleDelete}
-              >
-                Poista
-              </MalvaButton>
-            </Row>
+            {this.getButtons(isEnabled)}
 
           </MalvaForm>
         </Col>
@@ -223,6 +192,7 @@ export default withRouter(connect(
   mapStateToProps,
   {
     addEntry,
+    updateEntry,
     deleteEntry,
     addUIMessage
   }
