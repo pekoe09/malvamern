@@ -1,10 +1,13 @@
 import React from 'react'
 import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import '../../assets/index.css'
+
 import MalvaLayout from '../uiStructure/MalvaLayout'
 
 import CountryList from '../countries/countryList'
 import Diary from '../diary/Diary'
+import EntryEdit from '../diary/EntryEdit'
 import FrontPage from '../frontpage/FrontPage'
 import Garden from '../garden/Garden'
 import PlantAdd from '../plants/plantAdd'
@@ -21,6 +24,7 @@ class App extends React.Component {
         <Route exact path='/' render={() => <FrontPage />} />
         <Route exact path='/countries' render={() => <CountryList />} />
         <Route exact path='/diary' render={() => <Diary />} />
+        <Route exact path='/diary/addentry' render={() => <EntryEdit />} />
         <Route exact path='/garden' render={() => <Garden />} />
         <Route exact path='/plants' render={() => <PlantList />} />
         <Route exact path='/plants/add' render={() => <PlantAdd />} />

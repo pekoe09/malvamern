@@ -1,0 +1,9 @@
+.malva-datepicker {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: #ccc;
+  border-width: 1px;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+}
